@@ -19,7 +19,7 @@ public class MainActivity extends BridgeActivity {
     private static final String UA_REAL = "Mozilla/5.0 (Linux; Android 14; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36";
     
     // 指纹注入 JS 代码
-    private static final String FINGERPRINT_JS = "(function(){Object.defineProperty(screen,'width',{value:390});Object.defineProperty(screen,'height',{value:844});Object.defineProperty(screen,'pixelDepth',{value:24});const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');ctx.fillText('abcdefghijklmnopqrstuvwxyz',2,2);const gl=canvas.getContext('webgl')||canvas.getContext('experimental-webgl');if(gl){const e=gl.getExtension('WEBGL_debug_renderer_info');e&&gl.getParameter(e.UNMASKED_RENDERER_WEBGL)}})();";
+    private static final String FINGERPRINT_JS = "(function(){Object.defineProperty(screen,'width',{value:390});Object.defineProperty(screen,'height',{value:844});const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');ctx.fillText('abcdefghijklmnopqrstuvwxyz',2,2);const gl=canvas.getContext('webgl');if(gl){const e=gl.getExtension('WEBGL_debug_renderer_info');e&&gl.getParameter(e.UNMASKED_RENDERER_WEBGL)}})();";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
