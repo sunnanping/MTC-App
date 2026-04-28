@@ -48,19 +48,59 @@ public class MainActivity extends BridgeActivity {
                 WebSettings webSettings = webView.getSettings();
                 webSettings.setJavaScriptEnabled(true);
                 
-                // 设置自定义 WebViewClient 来动态切换 UA
+                // 获取现有的 WebViewClient
+                final WebViewClient originalClient = webView.getWebViewClient();
+                
+                // 设置一个包装的 WebViewClient，保持原有的功能
                 webView.setWebViewClient(new WebViewClient() {
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
                         updateUserAgent(view, url);
-                        view.loadUrl(url);
-                        return true;
+                        // 委托给原有的 Client 处理
+                        if (originalClient != null) {
+                            return originalClient.shouldOverrideUrlLoading(view, url);
+                        }
+                        // 如果没有原有的 Client，让 WebView 自己处理
+                        return false;
                     }
 
                     @Override
                     public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
                         updateUserAgent(view, url);
-                        super.onPageStarted(view, url, favicon);
+                        // 委托给原有的 Client 处理
+                        if (originalClient != null) {
+                            originalClient.onPageStarted(view, url, favicon);
+                        } else {
+                            super.onPageStarted(view, url, favicon);
+                        }
+                    }
+
+                    // 确保所有其他方法都委托给原有的 Client
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        if (originalClient != null) {
+                            originalClient.onPageFinished(view, url);
+                        } else {
+                            super.onPageFinished(view, url);
+                        }
+                    }
+
+                    @Override
+                    public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                        if (originalClient != null) {
+                            originalClient.onReceivedError(view, errorCode, description, failingUrl);
+                        } else {
+                            super.onReceivedError(view, errorCode, description, failingUrl);
+                        }
+                    }
+
+                    @Override
+                    public void onReceivedSslError(WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
+                        if (originalClient != null) {
+                            originalClient.onReceivedSslError(view, handler, error);
+                        } else {
+                            super.onReceivedSslError(view, handler, error);
+                        }
                     }
                 });
             }
