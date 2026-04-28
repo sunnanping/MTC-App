@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>MTC App</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1A1A1A; color: #FFF; height: 100vh; overflow: hidden; }
+    #root { width: 100%; height: 100%; }
+    .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #333; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+    .nav-scroll { flex: 1; overflow-x: auto; white-space: nowrap; }
+    .nav-scroll::-webkit-scrollbar { display: none; }
+    .site-icon { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; color: white; font-weight: bold; font-size: 18px; cursor: pointer; transition: all 0.2s; position: relative; margin-right: 12px; }
+    .site-icon.active { transform: scale(1.1); box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
+    .site-icon.active::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 16px; height: 16px; background: white; border-radius: 50%; border: 3px solid #1A1A1A; }
+    .add-btn { width: 48px; height: 48px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; }
+    .add-btn:hover { background: #444; }
+    .webview-container { position: absolute; top: 72px; left: 0; right: 0; bottom: 0; background: white; }
+    .webview-container iframe { width: 100%; height: 100%; border: none; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 200; padding: 16px; }
+    .modal.show { display: flex; }
+    .modal-content { background: #222; border-radius: 16px; width: 100%; max-width: 360px; padding: 20px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-header h2 { font-size: 18px; }
+    .modal-close { font-size: 24px; cursor: pointer; color: #888; }
+    .modal-close:hover { color: #FFF; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 14px; color: #888; margin-bottom: 4px; }
+    .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #444; border-radius: 8px; background: #333; color: #FFF; font-size: 14px; }
+    .form-group input:focus { outline: none; border-color: #5C61FF; }
+    .btn-group { display: flex; gap: 12px; margin-top: 16px; }
+    .btn { flex: 1; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+    .btn-cancel { background: #444; color: #FFF; }
+    .btn-cancel:hover { background: #555; }
+    .btn-primary { background: #5C61FF; color: #FFF; }
+    .btn-primary:hover { background: #4C51EF; }
+    .btn-danger { background: #DC2626; color: #FFF; }
+    .btn-danger:hover { background: #B91C1C; }
+    .context-menu { position: fixed; background: #222; border-radius: 12px; padding: 8px; z-index: 210; display: none; min-width: 140px; }
+    .context-menu.show { display: block; }
+    .context-menu button { width: 100%; padding: 10px 12px; border: none; background: transparent; color: #FFF; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .context-menu button:hover { background: #333; }
+    .context-menu button.delete { color: #EF4444; }
+    .delete-confirm { display: none; }
+    .delete-confirm.show { display: flex; }
+    .loading-overlay { position: absolute; inset: 0; background: #1A1A1A; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
+    .loading-spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #5C61FF; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { margin-top: 16px; color: #888; }
+    .error-overlay { position: absolute; inset: 0; background: #1A1A1A; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
+    .error-overlay.show { display: flex; }
+    .error-icon { font-size: 48px; margin-bottom: 16px; }
+    .error-text { color: #888; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div class="navbar">
+      <div class="nav-scroll" id="navScroll"></div>
+      <div class="add-btn" id="addBtn">+</div>
+    </div>
+
+    <div class="webview-container" id="webviewContainer">
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">加载中...</div>
+      </div>
+      <div class="error-overlay" id="errorOverlay">
+        <div class="error-icon">🔴</div>
+        <div class="error-text">无法加载此网站</div>
+        <button class="btn btn-primary" onclick="location.reload()">重试</button>
+      </div>
+      <iframe id="mainFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+    </div>
+
+    <div class="modal" id="siteModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modalTitle">添加网站</h2>
+          <span class="modal-close" id="modalClose">×</span>
+        </div>
+        <div class="form-group">
+          <label>网站名称</label>
+          <input type="text" id="siteName" placeholder="输入网站名称" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label>网站地址</label>
+          <input type="url" id="siteUrl" placeholder="https://example.com">
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-cancel" id="modalCancel">取消</button>
+          <button class="btn btn-primary" id="modalSubmit">添加</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="delete-confirm modal" id="deleteModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>确认删除</h2>
+          <span class="modal-close" id="deleteClose">×</span>
+        </div>
+        <p id="deleteMessage">确定要删除此网站吗？</p>
+        <div class="btn-group">
+          <button class="btn btn-cancel" id="deleteCancel">取消</button>
+          <button class="btn btn-danger" id="deleteConfirm">删除</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="context-menu" id="contextMenu">
+      <button id="ctxEdit">✏️ 编辑</button>
+      <button class="delete" id="ctxDelete">🗑️ 删除</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'mtc_websites';
+    const colors = ['#5C61FF', '#00D4AA', '#1890FF', '#FF6B6B', '#4285F4', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4', '#8BC34A'];
+    
+    const initialWebsites = [
+      { id: '1', name: 'TRAE SOLO', url: 'https://solo.trae.cn', icon: 'T', color: '#5C61FF', order: 1 },
+      { id: '2', name: 'DeepSeek', url: 'https://chat.deepseek.com', icon: 'D', color: '#00D4AA', order: 2 },
+      { id: '3', name: '豆包', url: 'https://www.doubao.com/chat', icon: '豆', color: '#1890FF', order: 3 },
+      { id: '4', name: 'Kimi', url: 'https://www.kimi.com', icon: 'K', color: '#FF6B6B', order: 4 },
+      { id: '5', name: 'NotebookLM', url: 'https://notebooklm.google.com', icon: 'N', color: '#4285F4', order: 5 },
+    ];
+
+    function getWebsites() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? JSON.parse(data) : initialWebsites;
+      } catch {
+        return initialWebsites;
+      }
+    }
+
+    function saveWebsites(websites) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(websites));
+    }
+
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function generateColor() {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function getIcon(name) {
+      if (!name) return '?';
+      const chinese = /[\u4e00-\u9fa5]/;
+      return chinese.test(name) ? name.charAt(0) : name.charAt(0).toUpperCase();
+    }
+
+    function validateUrl(url) {
+      try {
+        const u = new URL(url);
+        return ['http:', 'https:'].includes(u.protocol);
+      } catch {
+        return false;
+      }
+    }
+
+    const navScroll = document.getElementById('navScroll');
+    const addBtn = document.getElementById('addBtn');
+    const mainFrame = document.getElementById('mainFrame');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const errorOverlay = document.getElementById('errorOverlay');
+    const siteModal = document.getElementById('siteModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalClose = document.getElementById('modalClose');
+    const modalCancel = document.getElementById('modalCancel');
+    const modalSubmit = document.getElementById('modalSubmit');
+    const siteName = document.getElementById('siteName');
+    const siteUrl = document.getElementById('siteUrl');
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteClose = document.getElementById('deleteClose');
+    const deleteCancel = document.getElementById('deleteCancel');
+    const deleteConfirm = document.getElementById('deleteConfirm');
+    const deleteMessage = document.getElementById('deleteMessage');
+    const contextMenu = document.getElementById('contextMenu');
+    const ctxEdit = document.getElementById('ctxEdit');
+    const ctxDelete = document.getElementById('ctxDelete');
+
+    let websites = [];
+    let activeSite = null;
+    let editingSite = null;
+    let contextSite = null;
+
+    function renderNav() {
+      navScroll.innerHTML = '';
+      websites.forEach(site => {
+        const icon = document.createElement('div');
+        icon.className = `site-icon ${site.id === activeSite?.id ? 'active' : ''}`;
+        icon.style.backgroundColor = site.color;
+        icon.textContent = site.icon;
+        icon.title = site.name;
+        
+        icon.addEventListener('click', () => selectSite(site));
+        
+        let longPressTimer = null;
+        icon.addEventListener('mousedown', () => {
+          longPressTimer = setTimeout(() => showContextMenu(site, event), 500);
+        });
+        icon.addEventListener('mouseup', () => clearTimeout(longPressTimer));
+        icon.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
+        icon.addEventListener('touchstart', (e) => {
+          longPressTimer = setTimeout(() => showContextMenu(site, e.touches[0]), 500);
+        });
+        icon.addEventListener('touchend', () => clearTimeout(longPressTimer));
+        
+        navScroll.appendChild(icon);
+      });
+    }
+
+    function selectSite(site) {
+      activeSite = site;
+      renderNav();
+      loadSite(site);
+      hideContextMenu();
+    }
+
+    function loadSite(site) {
+      loadingOverlay.style.display = 'flex';
+      errorOverlay.style.display = 'none';
+      mainFrame.src = site.url;
+    }
+
+    mainFrame.addEventListener('load', () => {
+      loadingOverlay.style.display = 'none';
+      errorOverlay.style.display = 'none';
+    });
+
+    mainFrame.addEventListener('error', () => {
+      loadingOverlay.style.display = 'none';
+      errorOverlay.style.display = 'flex';
+    });
+
+    function showAddModal() {
+      editingSite = null;
+      modalTitle.textContent = '添加网站';
+      modalSubmit.textContent = '添加';
+      siteName.value = '';
+      siteUrl.value = '';
+      siteModal.classList.add('show');
+    }
+
+    function showEditModal(site) {
+      editingSite = site;
+      modalTitle.textContent = '编辑网站';
+      modalSubmit.textContent = '保存';
+      siteName.value = site.name;
+      siteUrl.value = site.url;
+      siteModal.classList.add('show');
+    }
+
+    function hideModal() {
+      siteModal.classList.remove('show');
+      editingSite = null;
+    }
+
+    function saveSite() {
+      const name = siteName.value.trim();
+      const url = siteUrl.value.trim();
+      
+      if (!name) { alert('请输入网站名称'); return; }
+      if (!url) { alert('请输入网站地址'); return; }
+      if (!validateUrl(url)) { alert('请输入有效的网址'); return; }
+
+      if (editingSite) {
+        const idx = websites.findIndex(s => s.id === editingSite.id);
+        websites[idx] = {
+          ...websites[idx],
+          name,
+          url,
+          icon: getIcon(name),
+        };
+      } else {
+        websites.push({
+          id: generateId(),
+          name,
+          url,
+          icon: getIcon(name),
+          color: generateColor(),
+          order: websites.length + 1,
+        });
+      }
+      
+      saveWebsites(websites);
+      renderNav();
+      hideModal();
+      
+      if (!editingSite && websites.length === 1) {
+        selectSite(websites[0]);
+      } else if (editingSite && activeSite?.id === editingSite.id) {
+        selectSite(websites.find(s => s.id === editingSite.id));
+      }
+    }
+
+    function showContextMenu(site, e) {
+      contextSite = site;
+      contextMenu.style.left = `${Math.min(e.clientX, window.innerWidth - 140)}px`;
+      contextMenu.style.top = `${Math.min(e.clientY, window.innerHeight - 100)}px`;
+      contextMenu.classList.add('show');
+    }
+
+    function hideContextMenu() {
+      contextMenu.classList.remove('show');
+      contextSite = null;
+    }
+
+    function showDeleteConfirm(site) {
+      contextSite = site;
+      deleteMessage.textContent = `确定要删除网站 "${site.name}" 吗？`;
+      deleteModal.classList.add('show');
+      hideContextMenu();
+    }
+
+    function deleteSite() {
+      if (!contextSite) return;
+      websites = websites.filter(s => s.id !== contextSite.id);
+      saveWebsites(websites);
+      renderNav();
+      
+      if (activeSite?.id === contextSite.id) {
+        if (websites.length > 0) {
+          selectSite(websites[0]);
+        } else {
+          activeSite = null;
+          mainFrame.src = '';
+        }
+      }
+      
+      deleteModal.classList.remove('show');
+      contextSite = null;
+    }
+
+    addBtn.addEventListener('click', showAddModal);
+    modalClose.addEventListener('click', hideModal);
+    modalCancel.addEventListener('click', hideModal);
+    modalSubmit.addEventListener('click', saveSite);
+    deleteClose.addEventListener('click', () => deleteModal.classList.remove('show'));
+    deleteCancel.addEventListener('click', () => deleteModal.classList.remove('show'));
+    deleteConfirm.addEventListener('click', deleteSite);
+    ctxEdit.addEventListener('click', () => { if (contextSite) { showEditModal(contextSite); } });
+    ctxDelete.addEventListener('click', () => { if (contextSite) { showDeleteConfirm(contextSite); } });
+    
+    document.addEventListener('click', (e) => {
+      if (!contextMenu.contains(e.target) && !e.target.classList.contains('site-icon')) {
+        hideContextMenu();
+      }
+    });
+
+    websites = getWebsites();
+    renderNav();
+    if (websites.length > 0) {
+      selectSite(websites[0]);
+    }
+  </script>
+</body>
+</html>

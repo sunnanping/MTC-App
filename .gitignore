@@ -29,5 +29,6 @@ Thumbs.db
 
 # Secrets
 *.jks
-*.keystore
+# Keep debug.keystore for CI builds
+# *.keystore
 google-services.json

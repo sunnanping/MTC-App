@@ -1,7 +1,7 @@
 {
   "appId": "cn.trae.mtc",
   "appName": "MTC App",
-  "webDir": "dist",
+  "webDir": "www",
   "server": {
     "cleartext": true,
     "errorPath": "error.html"
