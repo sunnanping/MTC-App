@@ -14,7 +14,7 @@ import com.getcapacitor.BridgeActivity;
 public class MainActivity extends BridgeActivity {
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         if (bridge != null) {
             WebView webView = bridge.getWebView();
