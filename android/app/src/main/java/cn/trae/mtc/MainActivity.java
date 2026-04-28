@@ -9,8 +9,6 @@ import android.webkit.WebView;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.graphics.Insets;
@@ -22,8 +20,12 @@ public class MainActivity extends BridgeActivity {
     // 真实的 Android Chrome UA
     private static final String UA_REAL = "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36";
     
-    // 指纹注入 JS 代码
-    private static final String FINGERPRINT_JS = "(function(){Object.defineProperty(screen,'width',{value:390});Object.defineProperty(screen,'height',{value:844});const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');ctx.fillText('abcdefghijklmnopqrstuvwxyz',2,2);const gl=canvas.getContext('webgl');if(gl){const e=gl.getExtension('WEBGL_debug_renderer_info');e&&gl.getParameter(e.UNMASKED_RENDERER_WEBGL)}})();";
+    // 保存原始的 WebViewClient 和 WebChromeClient
+    private WebViewClient originalWebViewClient;
+    private WebChromeClient originalWebChromeClient;
+    
+    // 标记是否加载外部网站
+    private boolean isExternalWebsite = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,10 @@ public class MainActivity extends BridgeActivity {
         if (bridge != null) {
             WebView webView = bridge.getWebView();
             if (webView != null) {
+                // 保存原始的 WebViewClient 和 WebChromeClient
+                originalWebViewClient = webView.getWebViewClient();
+                originalWebChromeClient = webView.getWebChromeClient();
+                
                 // 设置 WindowInsets 监听器
                 ViewCompat.setOnApplyWindowInsetsListener(webView, (v, windowInsets) -> {
                     Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
@@ -61,7 +67,21 @@ public class MainActivity extends BridgeActivity {
         public void loadUrl(String url) {
             runOnUiThread(() -> {
                 if (bridge != null && bridge.getWebView() != null) {
-                    bridge.getWebView().loadUrl(url);
+                    WebView webView = bridge.getWebView();
+                    isExternalWebsite = true;
+                    
+                    // 切换到外部网站模式
+                    webView.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                            return false;
+                        }
+                    });
+                    
+                    webView.setWebChromeClient(new WebChromeClient());
+                    
+                    // 加载外部 URL
+                    webView.loadUrl(url);
                 }
             });
         }
@@ -87,7 +107,19 @@ public class MainActivity extends BridgeActivity {
         public void returnToHome() {
             runOnUiThread(() -> {
                 if (bridge != null && bridge.getWebView() != null) {
-                    bridge.getWebView().loadUrl("file:///android_asset/public/index.html");
+                    WebView webView = bridge.getWebView();
+                    isExternalWebsite = false;
+                    
+                    // 恢复原始的 WebViewClient 和 WebChromeClient
+                    if (originalWebViewClient != null) {
+                        webView.setWebViewClient(originalWebViewClient);
+                    }
+                    if (originalWebChromeClient != null) {
+                        webView.setWebChromeClient(originalWebChromeClient);
+                    }
+                    
+                    // 重新加载首页
+                    webView.loadUrl("file:///android_asset/public/index.html");
                 }
             });
         }
@@ -114,22 +146,5 @@ public class MainActivity extends BridgeActivity {
 
         // 4. 支持混合内容
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-
-        // 5. 支持弹窗登录
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false; // 让 WebView 处理所有 URL
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                // 注入指纹 JS
-                view.evaluateJavascript(FINGERPRINT_JS, null);
-            }
-        });
-        
-        webView.setWebChromeClient(new WebChromeClient());
     }
 }
