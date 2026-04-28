@@ -28,15 +28,18 @@ jobs:
           java-version: '21'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.14.3'
+      - name: Generate Gradle Wrapper
+        working-directory: ./android
+        run: gradle wrapper
       - name: Sync Capacitor
         run: npx cap sync android
       - name: Update Version
         run: |
           RUN_NUMBER=${{ github.run_number }}
           VERSION_NAME="1.0.${RUN_NUMBER}"
-          
           echo "Updating to Version Code: $RUN_NUMBER, Version Name: $VERSION_NAME"
-          
           sed -i "s/versionCode 1/versionCode $RUN_NUMBER/g" android/app/build.gradle
           sed -i "s/versionName \"1.0\"/versionName \"$VERSION_NAME\"/g" android/app/build.gradle
       - name: Build APK
