@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>连接中断</title>
+    <style>
+        body {
+            background-color: #1A1A1A;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #5C61FF;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 24px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .message {
+            font-size: 15px;
+            color: #999999;
+            margin-bottom: 8px;
+        }
+        .sub-message {
+            font-size: 13px;
+            color: #666666;
+        }
+        .logo {
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="72" height="72">
+      <g transform="translate(206, 296) scale(18)">
+        <g fill="#5C61FF">
+          <path d="M.002 0H0v19.549h4.454V4.454h24.864v15.092H4.454V24h29.318V0z"></path>
+          <path d="m13.43 8.776-3.149 3.15 3.15 3.149 3.149-3.15zM23.204 8.775l-3.15 3.149 3.15 3.149 3.15-3.15z"></path>
+        </g>
+      </g>
+    </svg>
+    
+    <div class="spinner"></div>
+    <div class="message">网络连接已断开，正在尝试重新连接...</div>
+    <div class="sub-message">请检查您的网络设置</div>
+
+    <script>
+        const targetUrl = 'https://solo.trae.cn';
+        const retryInterval = 3000;
+
+        function checkNetworkAndReload() {
+            fetch(targetUrl + '?ping=' + Date.now(), { mode: 'no-cors', cache: 'no-store' })
+                .then(() => {
+                    window.location.replace('/');
+                })
+                .catch(() => {
+                    setTimeout(checkNetworkAndReload, retryInterval);
+                });
+        }
+
+        setTimeout(checkNetworkAndReload, retryInterval);
+    </script>
+</body>
+</html>

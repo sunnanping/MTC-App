@@ -1,0 +1,34 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/.idea/
+android/*.iml
+android/captures/
+android/ExternalAndroidProjects/
+android/gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+*.apk
+*.aab
+
+# Secrets
+*.jks
+*.keystore
+google-services.json
