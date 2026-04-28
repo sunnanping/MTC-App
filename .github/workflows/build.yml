@@ -26,13 +26,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '21'
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.14.3'
-      - name: Generate Gradle Wrapper
-        working-directory: ./android
-        run: gradle wrapper
       - name: Sync Capacitor
         run: npx cap sync android
       - name: Update Version
@@ -45,6 +38,7 @@ jobs:
       - name: Build APK
         working-directory: ./android
         run: |
+          chmod +x gradlew
           ./gradlew assembleDebug
           cp app/build/outputs/apk/debug/app-debug.apk ../MTC-App-v1.0.${{ github.run_number }}.apk
       - name: Create Release
