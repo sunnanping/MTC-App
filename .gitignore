@@ -11,7 +11,6 @@ android/.idea/
 android/*.iml
 android/captures/
 android/ExternalAndroidProjects/
-android/gradle/wrapper/gradle-wrapper.jar
 
 # IDE
 .idea/
