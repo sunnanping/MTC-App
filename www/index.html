@@ -5,19 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>MTC App</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1A1A1A; color: #FFF; height: 100vh; overflow: hidden; }
     #root { width: 100%; height: 100%; }
     .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #333; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
     .nav-scroll { flex: 1; overflow-x: auto; white-space: nowrap; }
     .nav-scroll::-webkit-scrollbar { display: none; }
-    .site-icon { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; color: white; font-weight: bold; font-size: 18px; cursor: pointer; transition: all 0.2s; position: relative; margin-right: 12px; }
+    .site-icon { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; color: white; font-weight: bold; font-size: 18px; cursor: pointer; transition: all 0.2s; position: relative; margin-right: 12px; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
     .site-icon.active { transform: scale(1.1); box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
     .site-icon.active::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 16px; height: 16px; background: white; border-radius: 50%; border: 3px solid #1A1A1A; }
     .add-btn { width: 48px; height: 48px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; }
     .add-btn:hover { background: #444; }
     .webview-container { position: absolute; top: 72px; left: 0; right: 0; bottom: 0; background: white; }
     .webview-container iframe { width: 100%; height: 100%; border: none; }
+    .loading-overlay { position: absolute; inset: 0; background: #1A1A1A; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
+    .loading-spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #5C61FF; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { margin-top: 16px; color: #888; }
+    .error-overlay { position: absolute; inset: 0; background: #1A1A1A; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
+    .error-overlay.show { display: flex; }
+    .error-icon { font-size: 48px; margin-bottom: 16px; }
+    .error-text { color: #888; margin-bottom: 16px; }
     .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 200; padding: 16px; }
     .modal.show { display: flex; }
     .modal-content { background: #222; border-radius: 16px; width: 100%; max-width: 360px; padding: 20px; }
@@ -44,14 +52,6 @@
     .context-menu button.delete { color: #EF4444; }
     .delete-confirm { display: none; }
     .delete-confirm.show { display: flex; }
-    .loading-overlay { position: absolute; inset: 0; background: #1A1A1A; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
-    .loading-spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #5C61FF; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { margin-top: 16px; color: #888; }
-    .error-overlay { position: absolute; inset: 0; background: #1A1A1A; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
-    .error-overlay.show { display: flex; }
-    .error-icon { font-size: 48px; margin-bottom: 16px; }
-    .error-text { color: #888; margin-bottom: 16px; }
   </style>
 </head>
 <body>
@@ -71,7 +71,7 @@
         <div class="error-text">无法加载此网站</div>
         <button class="btn btn-primary" onclick="location.reload()">重试</button>
       </div>
-      <iframe id="mainFrame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-top-navigation"></iframe>
+      <iframe id="mainFrame"></iframe>
     </div>
 
     <div class="modal" id="siteModal">
@@ -347,11 +347,20 @@
     ctxEdit.addEventListener('click', () => { if (contextSite) { showEditModal(contextSite); } });
     ctxDelete.addEventListener('click', () => { if (contextSite) { showDeleteConfirm(contextSite); } });
     
+    document.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      return false;
+    });
+
     document.addEventListener('click', (e) => {
       if (!contextMenu.contains(e.target) && !e.target.classList.contains('site-icon')) {
         hideContextMenu();
       }
     });
+
+    document.addEventListener('touchstart', (e) => {
+      // 阻止长按选择
+    }, { passive: true });
 
     websites = getWebsites();
     renderNav();
