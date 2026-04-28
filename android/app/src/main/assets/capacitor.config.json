@@ -1,0 +1,35 @@
+{
+	"appId": "cn.trae.mtc",
+	"appName": "MTC App",
+	"webDir": "dist",
+	"server": {
+		"cleartext": true,
+		"errorPath": "error.html"
+	},
+	"android": {
+		"adjustMarginsForEdgeToEdge": "force"
+	},
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 3000,
+			"launchAutoHide": true,
+			"backgroundColor": "#1A1A1A",
+			"androidSplashResourceName": "splash",
+			"androidScaleType": "CENTER_CROP",
+			"showSpinner": true,
+			"androidSpinnerStyle": "large",
+			"iosSpinnerStyle": "small",
+			"spinnerColor": "#999999",
+			"splashFullScreen": false,
+			"splashImmersive": false,
+			"layoutName": "launch_screen",
+			"useDialog": false
+		},
+		"SystemBars": {
+			"insetsHandling": "disable"
+		},
+		"EdgeToEdgeSupport": {
+			"backgroundColor": "#FFFFFF"
+		}
+	}
+}

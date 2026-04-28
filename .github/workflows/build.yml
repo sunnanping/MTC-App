@@ -13,21 +13,26 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+
       - name: Install Dependencies
-        run: npm install
-      - name: Build Frontend
-        run: npm run build
+        run: npm ci
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '21'
+          cache: 'gradle'
+
       - name: Sync Capacitor
         run: npx cap sync android
+
       - name: Update Version
         run: |
           RUN_NUMBER=${{ github.run_number }}
@@ -35,12 +40,14 @@ jobs:
           echo "Updating to Version Code: $RUN_NUMBER, Version Name: $VERSION_NAME"
           sed -i "s/versionCode 1/versionCode $RUN_NUMBER/g" android/app/build.gradle
           sed -i "s/versionName \"1.0\"/versionName \"$VERSION_NAME\"/g" android/app/build.gradle
+
       - name: Build APK
         working-directory: ./android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx4g" -Dorg.gradle.parallel=true
           cp app/build/outputs/apk/debug/app-debug.apk ../MTC-App-v1.0.${{ github.run_number }}.apk
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
