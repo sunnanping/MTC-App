@@ -12,7 +12,7 @@ function App() {
   const [activeWebsite, setActiveWebsite] = useState<Website | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formMode, setFormMode] = useState<FormMode>('add');
-  const [editingWebsite, setEditingWebsite] = useState<Website | null>(null);
+  const [editingWebsite, setEditingWebsite] = useState<Website | undefined>(undefined);
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
@@ -35,7 +35,7 @@ function App() {
 
   const handleAddWebsite = () => {
     setFormMode('add');
-    setEditingWebsite(null);
+    setEditingWebsite(undefined);
     setShowForm(true);
   };
 

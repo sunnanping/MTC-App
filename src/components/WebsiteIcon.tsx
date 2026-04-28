@@ -12,11 +12,10 @@ export const WebsiteIcon = ({ website, isActive, onClick, onLongPress }: Website
   const [isPressed, setIsPressed] = useState(false);
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (e: React.MouseEvent) => {
     setIsPressed(true);
     longPressTimer.current = setTimeout(() => {
-      const event = new MouseEvent('contextmenu');
-      onLongPress(event);
+      onLongPress(e);
     }, 500);
   };
 
