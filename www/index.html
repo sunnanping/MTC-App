@@ -16,16 +16,8 @@
     .site-icon.active::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 16px; height: 16px; background: white; border-radius: 50%; border: 3px solid #1A1A1A; }
     .add-btn { width: 48px; height: 48px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; flex-shrink: 0; }
     .add-btn:hover { background: #444; }
-    .webview-container { position: absolute; top: 72px; left: 0; right: 0; bottom: 0; background: white; }
-    .webview-container iframe { width: 100%; height: 100%; border: none; }
-    .loading-overlay { position: absolute; inset: 0; background: #1A1A1A; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
-    .loading-spinner { width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #5C61FF; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { margin-top: 16px; color: #888; }
-    .error-overlay { position: absolute; inset: 0; background: #1A1A1A; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 30; }
-    .error-overlay.show { display: flex; }
-    .error-icon { font-size: 48px; margin-bottom: 16px; }
-    .error-text { color: #888; margin-bottom: 16px; }
+    .content-area { position: absolute; top: 72px; left: 0; right: 0; bottom: 0; background: white; display: flex; align-items: center; justify-content: center; }
+    .welcome-text { text-align: center; color: #666; }
     .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 200; padding: 16px; }
     .modal.show { display: flex; }
     .modal-content { background: #222; border-radius: 16px; width: 100%; max-width: 360px; padding: 20px; }
@@ -52,6 +44,10 @@
     .context-menu button.delete { color: #EF4444; }
     .delete-confirm { display: none; }
     .delete-confirm.show { display: flex; }
+    .back-button { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 250; background: #5C61FF; color: white; border: none; border-radius: 50px; padding: 12px 24px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(92, 97, 255, 0.35); transition: all 0.2s; display: none; }
+    .back-button.show { display: flex; }
+    .back-button:hover { background: #4C51EF; transform: translateX(-50%) scale(1.05); }
+    .back-button svg { width: 18px; height: 18px; margin-right: 6px; }
   </style>
 </head>
 <body>
@@ -61,18 +57,19 @@
       <div class="add-btn" id="addBtn">+</div>
     </div>
 
-    <div class="webview-container" id="webviewContainer">
-      <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">加载中...</div>
+    <div class="content-area" id="contentArea">
+      <div class="welcome-text">
+        <div style="font-size: 18px; margin-bottom: 8px;">选择一个网站开始使用</div>
+        <div style="font-size: 13px; color: #999;">点击图标打开相应的AI聊天服务</div>
       </div>
-      <div class="error-overlay" id="errorOverlay">
-        <div class="error-icon">🔴</div>
-        <div class="error-text">无法加载此网站</div>
-        <button class="btn btn-primary" onclick="location.reload()">重试</button>
-      </div>
-      <iframe id="mainFrame"></iframe>
     </div>
+
+    <button class="back-button" id="backButton">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      返回首页
+    </button>
 
     <div class="modal" id="siteModal">
       <div class="modal-content">
@@ -163,11 +160,23 @@
       }
     }
 
+    // 检查是否在 Android 环境中
+    function isAndroid() {
+      return typeof AndroidBridge !== 'undefined';
+    }
+
+    // 加载网站
+    function loadWebsite(url) {
+      if (isAndroid()) {
+        AndroidBridge.loadUrl(url);
+      } else {
+        // 在浏览器中测试时，打开新窗口
+        window.open(url, '_blank');
+      }
+    }
+
     const navScroll = document.getElementById('navScroll');
     const addBtn = document.getElementById('addBtn');
-    const mainFrame = document.getElementById('mainFrame');
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const errorOverlay = document.getElementById('errorOverlay');
     const siteModal = document.getElementById('siteModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalClose = document.getElementById('modalClose');
@@ -183,6 +192,7 @@
     const contextMenu = document.getElementById('contextMenu');
     const ctxEdit = document.getElementById('ctxEdit');
     const ctxDelete = document.getElementById('ctxDelete');
+    const backButton = document.getElementById('backButton');
 
     let websites = [];
     let activeSite = null;
@@ -218,25 +228,27 @@
     function selectSite(site) {
       activeSite = site;
       renderNav();
-      loadSite(site);
+      showBackButton();
+      loadWebsite(site.url);
       hideContextMenu();
     }
 
-    function loadSite(site) {
-      loadingOverlay.style.display = 'flex';
-      errorOverlay.style.display = 'none';
-      mainFrame.src = site.url;
+    function showBackButton() {
+      backButton.classList.add('show');
     }
 
-    mainFrame.addEventListener('load', () => {
-      loadingOverlay.style.display = 'none';
-      errorOverlay.style.display = 'none';
-    });
+    function hideBackButton() {
+      backButton.classList.remove('show');
+    }
 
-    mainFrame.addEventListener('error', () => {
-      loadingOverlay.style.display = 'none';
-      errorOverlay.style.display = 'flex';
-    });
+    function handleBackClick() {
+      if (isAndroid()) {
+        AndroidBridge.returnToHome();
+      }
+      activeSite = null;
+      renderNav();
+      hideBackButton();
+    }
 
     function showAddModal() {
       editingSite = null;
@@ -291,12 +303,6 @@
       saveWebsites(websites);
       renderNav();
       hideModal();
-      
-      if (!editingSite && websites.length === 1) {
-        selectSite(websites[0]);
-      } else if (editingSite && activeSite?.id === editingSite.id) {
-        selectSite(websites.find(s => s.id === editingSite.id));
-      }
     }
 
     function showContextMenu(site, e) {
@@ -324,15 +330,6 @@
       saveWebsites(websites);
       renderNav();
       
-      if (activeSite?.id === contextSite.id) {
-        if (websites.length > 0) {
-          selectSite(websites[0]);
-        } else {
-          activeSite = null;
-          mainFrame.src = '';
-        }
-      }
-      
       deleteModal.classList.remove('show');
       contextSite = null;
     }
@@ -346,6 +343,7 @@
     deleteConfirm.addEventListener('click', deleteSite);
     ctxEdit.addEventListener('click', () => { if (contextSite) { showEditModal(contextSite); } });
     ctxDelete.addEventListener('click', () => { if (contextSite) { showDeleteConfirm(contextSite); } });
+    backButton.addEventListener('click', handleBackClick);
     
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
@@ -364,9 +362,6 @@
 
     websites = getWebsites();
     renderNav();
-    if (websites.length > 0) {
-      selectSite(websites[0]);
-    }
   </script>
 </body>
 </html>
