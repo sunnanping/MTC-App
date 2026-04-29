@@ -307,17 +307,22 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         
         textView.setBackgroundResource(R.drawable.circle_bg);
         
+        int color;
         try {
-            int color = Color.parseColor(site.color);
-            textView.setBackgroundTintList(ColorStateList.valueOf(color));
+            color = Color.parseColor(site.color);
         } catch (Exception e) {
-            textView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#5C61FF")));
+            color = Color.parseColor("#5C61FF");
         }
         
-        if (activeSite != null && activeSite.url.equals(site.url)) {
+        boolean isActive = activeSite != null && activeSite.url.equals(site.url);
+        
+        if (isActive) {
+            textView.setBackgroundTintList(ColorStateList.valueOf(color));
             textView.setAlpha(1.0f);
         } else {
-            textView.setAlpha(0.6f);
+            int darkColor = darkenColor(color, 0.5f);
+            textView.setBackgroundTintList(ColorStateList.valueOf(darkColor));
+            textView.setAlpha(1.0f);
         }
         
         textView.setOnClickListener(v -> selectSite(site));
@@ -354,6 +359,13 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         textView.setTextSize(fontSize);
         textView.setMaxLines(maxLines);
         textView.setEllipsize(null);
+    }
+
+    private int darkenColor(int color, float factor) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] *= factor;
+        return Color.HSVToColor(hsv);
     }
 
     private void selectSite(Site site) {

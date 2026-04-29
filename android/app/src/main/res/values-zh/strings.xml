@@ -5,40 +5,40 @@
     <string name="package_name">cn.trae.mtc</string>
     <string name="custom_url_scheme">cn.trae.mtc</string>
     
-    <string name="select_language">Xuanze Yuyan</string>
-    <string name="action">Caozuo</string>
-    <string name="edit">Bianji</string>
-    <string name="delete">Shanchu</string>
+    <string name="select_language">选择语言</string>
+    <string name="action">操作</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
     
-    <string name="add_site">Tianjia Wangzhan</string>
-    <string name="edit_site">Bianji Wangzhan</string>
-    <string name="site_name">Wangzhan Mingcheng</string>
-    <string name="site_url">Wangzhi (https://...)</string>
-    <string name="site_short_name">Wangzhan Jianxie (1-4 zifu)</string>
-    <string name="site_short_name_hint">liru: D huo Dou</string>
-    <string name="allow_wrap">Yunxue Huanhang Xianshi</string>
+    <string name="add_site">添加网站</string>
+    <string name="edit_site">编辑网站</string>
+    <string name="site_name">网站名称</string>
+    <string name="site_url">网址</string>
+    <string name="site_short_name">网站简写</string>
+    <string name="site_short_name_hint">如：D</string>
+    <string name="allow_wrap">允许换行</string>
     
-    <string name="save">Baocun</string>
-    <string name="cancel">Quxiao</string>
-    <string name="saved">Yi Baocun</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="saved">已保存</string>
     
-    <string name="save_success">Zidong Baocun Chenggong</string>
-    <string name="save_failed">Baocun Shibai</string>
+    <string name="save_success">保存成功</string>
+    <string name="save_failed">保存失败</string>
     
-    <string name="permission_title">Xuyao Wenjian Cunchu Quanxian</string>
-    <string name="permission_message">Shifou Yunxu Baocun Wenjian?</string>
-    <string name="always_remind">Meici Du Tixing</string>
-    <string name="allow">Yunxu</string>
-    <string name="deny">Jujue</string>
+    <string name="permission_title">需要存储权限</string>
+    <string name="permission_message">允许保存文件？</string>
+    <string name="always_remind">每次提醒</string>
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
     
-    <string name="duplicate_title">Jiance Dao Chongfu Neirong</string>
-    <string name="duplicate_message">Ci Neirong Yi Baocun Guo:\n%s\n\nShifou Reng Yao Baocun?</string>
+    <string name="duplicate_title">重复内容</string>
+    <string name="duplicate_message">内容已保存过</string>
     
-    <string name="auto_save_success">Zidong Baocun Chenggong</string>
-    <string name="seconds_close">%d Miao Hou Zidong Guanbi</string>
+    <string name="auto_save_success">自动保存成功</string>
+    <string name="seconds_close">%d秒后关闭</string>
     
     <string name="language_en">EN</string>
-    <string name="language_zh">ZH</string>
+    <string name="language_zh">中文</string>
     <string name="language_ja">JA</string>
     <string name="language_ko">KO</string>
     <string name="language_es">ES</string>
