@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">选择语言</string>
+    <string name="action">操作</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
+    
+    <string name="add_site">添加网站</string>
+    <string name="edit_site">编辑网站</string>
+    <string name="site_name">网站名称</string>
+    <string name="site_url">网址（https://...）</string>
+    <string name="site_short_name">网站简写（1-4个字符）</string>
+    <string name="site_short_name_hint">例如：D 或 豆</string>
+    <string name="allow_wrap">允许换行显示</string>
+    
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="saved">已保存</string>
+    
+    <string name="save_success">自动保存成功</string>
+    <string name="save_failed">保存失败</string>
+    
+    <string name="permission_title">需要文件存储权限</string>
+    <string name="permission_message">是否允许保存文件？</string>
+    <string name="always_remind">每次都提醒</string>
+    <string name="allow">允许</string>
+    <string name="deny">拒绝</string>
+    
+    <string name="duplicate_title">检测到重复内容</string>
+    <string name="duplicate_message">此内容已保存过：\n%s\n\n是否仍要保存？</string>
+    
+    <string name="auto_save_success">自动保存成功</string>
+    <string name="seconds_close">%d 秒后自动关闭</string>
+    
+    <string name="language_en">EN</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">한국어</string>
+    <string name="language_es">Español</string>
+    <string name="language_fr">Français</string>
+    <string name="language_de">Deutsch</string>
+    <string name="language_pt">Português</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_ar">العربية</string>
+</resources>

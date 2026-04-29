@@ -63,6 +63,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private static final int REQUEST_STORAGE_PERMISSION = 1001;
     private static final int MAX_MD5_CACHE = 100;
     private static final int MAX_RECENT_SAVES = 10;
+    private static final int MIN_CONTENT_LENGTH = 200;
 
     private List<Site> sites;
     private Site activeSite;
@@ -314,8 +315,9 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         }
         
         if (activeSite != null && activeSite.url.equals(site.url)) {
-            textView.setScaleX(1.1f);
-            textView.setScaleY(1.1f);
+            textView.setAlpha(1.0f);
+        } else {
+            textView.setAlpha(0.6f);
         }
         
         textView.setOnClickListener(v -> selectSite(site));
@@ -361,10 +363,21 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     }
 
     private void showLanguageDialog() {
-        String[] languages = {"EN", "中文", "日本語", "한국어", "Español", "Français", "Deutsch", "Português", "Русский", "العربية"};
+        String[] languages = {
+            getString(R.string.language_en),
+            getString(R.string.language_zh),
+            getString(R.string.language_ja),
+            getString(R.string.language_ko),
+            getString(R.string.language_es),
+            getString(R.string.language_fr),
+            getString(R.string.language_de),
+            getString(R.string.language_pt),
+            getString(R.string.language_ru),
+            getString(R.string.language_ar)
+        };
         
         new AlertDialog.Builder(this)
-            .setTitle("选择语言 / Select Language")
+            .setTitle(getString(R.string.select_language))
             .setItems(languages, (dialog, which) -> {
                 currentLanguage = languages[which];
                 languageText.setText(currentLanguage);
@@ -379,8 +392,8 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
 
     private void showEditDeleteDialog(Site site) {
         new AlertDialog.Builder(this)
-            .setTitle("操作 / Action")
-            .setItems(new String[]{"编辑 / Edit", "删除 / Delete"}, (dialog, which) -> {
+            .setTitle(getString(R.string.action))
+            .setItems(new String[]{getString(R.string.edit), getString(R.string.delete)}, (dialog, which) -> {
                 if (which == 0) {
                     showSiteDialog(site);
                 } else {
@@ -392,45 +405,45 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
 
     private void showSiteDialog(Site editSite) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(editSite == null ? "添加网站" : "编辑网站");
+        builder.setTitle(editSite == null ? getString(R.string.add_site) : getString(R.string.edit_site));
         
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(dpToPx(24), dpToPx(8), dpToPx(24), dpToPx(8));
         
         EditText nameInput = new EditText(this);
-        nameInput.setHint("网站名称");
+        nameInput.setHint(getString(R.string.site_name));
         if (editSite != null) nameInput.setText(editSite.name);
         layout.addView(nameInput);
         
         EditText urlInput = new EditText(this);
-        urlInput.setHint("网址（https://...）");
+        urlInput.setHint(getString(R.string.site_url));
         urlInput.setInputType(EditorInfo.TYPE_TEXT_VARIATION_URI);
         if (editSite != null) urlInput.setText(editSite.url);
         layout.addView(urlInput);
         
         TextView iconHint = new TextView(this);
-        iconHint.setText("网站简写（1-4个字符）");
+        iconHint.setText(getString(R.string.site_short_name));
         iconHint.setTextSize(12);
         iconHint.setTextColor(Color.GRAY);
         iconHint.setPadding(0, dpToPx(16), 0, 0);
         layout.addView(iconHint);
         
         EditText iconInput = new EditText(this);
-        iconInput.setHint("例如：D 或 豆");
+        iconInput.setHint(getString(R.string.site_short_name_hint));
         iconInput.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(4)});
         if (editSite != null) iconInput.setText(editSite.icon);
         layout.addView(iconInput);
         
         CheckBox wrapCheckBox = new CheckBox(this);
-        wrapCheckBox.setText("允许换行显示");
+        wrapCheckBox.setText(getString(R.string.allow_wrap));
         wrapCheckBox.setPadding(0, dpToPx(16), 0, 0);
         if (editSite != null) wrapCheckBox.setChecked(editSite.allowWrap);
         layout.addView(wrapCheckBox);
         
         builder.setView(layout);
         
-        builder.setPositiveButton("保存", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.save), (dialog, which) -> {
             String name = nameInput.getText().toString().trim();
             String url = urlInput.getText().toString().trim();
             String icon = iconInput.getText().toString().trim();
@@ -457,7 +470,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             }
         });
         
-        builder.setNegativeButton("取消", null);
+        builder.setNegativeButton(getString(R.string.cancel), null);
         builder.show();
     }
 
@@ -495,6 +508,10 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             return;
         }
         
+        if (content.length() < MIN_CONTENT_LENGTH) {
+            return;
+        }
+        
         pendingContent = content;
         
         if (checkPermission()) {
@@ -519,27 +536,27 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
 
     private void showPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("📁 需要文件存储权限");
-        builder.setMessage("是否允许保存文件？");
+        builder.setTitle(getString(R.string.permission_title));
+        builder.setMessage(getString(R.string.permission_message));
         
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(dpToPx(24), dpToPx(16), dpToPx(24), dpToPx(8));
         
         CheckBox checkBox = new CheckBox(this);
-        checkBox.setText("每次都提醒");
+        checkBox.setText(getString(R.string.always_remind));
         checkBox.setChecked(prefs.getBoolean(KEY_ALWAYS_REMIND, true));
         layout.addView(checkBox);
         
         builder.setView(layout);
         
-        builder.setPositiveButton("允许", (dialog, which) -> {
+        builder.setPositiveButton(getString(R.string.allow), (dialog, which) -> {
             prefs.edit().putBoolean(KEY_ALWAYS_REMIND, checkBox.isChecked()).apply();
             prefs.edit().putString(KEY_PERMISSION, "granted").apply();
             requestPermission();
         });
         
-        builder.setNegativeButton("拒绝", (dialog, which) -> {
+        builder.setNegativeButton(getString(R.string.deny), (dialog, which) -> {
             prefs.edit().putBoolean(KEY_ALWAYS_REMIND, checkBox.isChecked()).apply();
             prefs.edit().putString(KEY_PERMISSION, "denied").apply();
         });
@@ -626,12 +643,12 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
 
     private void showDuplicateDialog(String content, String md5Hash, String existingFilename) {
         new AlertDialog.Builder(this)
-            .setTitle("⚠️ 检测到重复内容")
-            .setMessage("此内容已保存过：\n" + existingFilename + "\n\n是否仍要保存？")
-            .setPositiveButton("保存", (dialog, which) -> {
+            .setTitle(getString(R.string.duplicate_title))
+            .setMessage(String.format(getString(R.string.duplicate_message), existingFilename))
+            .setPositiveButton(getString(R.string.save), (dialog, which) -> {
                 performSave(content, md5Hash);
             })
-            .setNegativeButton("取消", null)
+            .setNegativeButton(getString(R.string.cancel), null)
             .show();
     }
 
@@ -735,7 +752,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             dialogLayout.setPadding(dpToPx(20), dpToPx(16), dpToPx(20), dpToPx(8));
             
             TextView headerView = new TextView(this);
-            headerView.setText(success ? "📄 自动保存成功" : "❌ 保存失败");
+            headerView.setText(success ? getString(R.string.auto_save_success) : getString(R.string.save_failed));
             headerView.setTextColor(success ? Color.parseColor("#5C61FF") : Color.parseColor("#FF6B6B"));
             headerView.setTextSize(18);
             headerView.setTypeface(null, android.graphics.Typeface.BOLD);
@@ -774,7 +791,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             dialogLayout.addView(scrollView);
             
             TextView timerView = new TextView(this);
-            timerView.setText("3 秒后自动关闭");
+            timerView.setText(String.format(getString(R.string.seconds_close), 3));
             timerView.setTextColor(Color.parseColor("#666666"));
             timerView.setTextSize(12);
             timerView.setGravity(Gravity.CENTER);

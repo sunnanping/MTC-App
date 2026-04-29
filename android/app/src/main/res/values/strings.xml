@@ -4,4 +4,47 @@
     <string name="title_activity_main">MTC App</string>
     <string name="package_name">cn.trae.mtc</string>
     <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Select Language</string>
+    <string name="action">Action</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    
+    <string name="add_site">Add Site</string>
+    <string name="edit_site">Edit Site</string>
+    <string name="site_name">Site Name</string>
+    <string name="site_url">Site URL (https://...)</string>
+    <string name="site_short_name">Site Short Name (1-4 chars)</string>
+    <string name="site_short_name_hint">e.g., D or Dou</string>
+    <string name="allow_wrap">Allow wrap text</string>
+    
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="saved">Saved</string>
+    
+    <string name="save_success">Auto saved</string>
+    <string name="save_failed">Save failed</string>
+    
+    <string name="permission_title">File Storage Permission Required</string>
+    <string name="permission_message">Allow file saving?</string>
+    <string name="always_remind">Always remind</string>
+    <string name="allow">Allow</string>
+    <string name="deny">Deny</string>
+    
+    <string name="duplicate_title">Duplicate Content Detected</string>
+    <string name="duplicate_message">This content has been saved:\n%s\n\nSave anyway?</string>
+    
+    <string name="auto_save_success">Auto Save Success</string>
+    <string name="seconds_close">%d seconds to close</string>
+    
+    <string name="language_en">EN</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">한국어</string>
+    <string name="language_es">Español</string>
+    <string name="language_fr">Français</string>
+    <string name="language_de">Deutsch</string>
+    <string name="language_pt">Português</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_ar">العربية</string>
 </resources>
