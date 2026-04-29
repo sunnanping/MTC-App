@@ -79,7 +79,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private ClipboardManager clipboardManager;
     private SharedPreferences prefs;
     private View addButton;
-    private View toastView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -723,29 +722,29 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         }
     }
 
+    private AlertDialog saveResultDialog = null;
+
     private void showSaveToast(String currentFilename, boolean success) {
         runOnUiThread(() -> {
-            if (toastView != null) {
-                toastView.setVisibility(View.GONE);
+            if (saveResultDialog != null && saveResultDialog.isShowing()) {
+                saveResultDialog.dismiss();
             }
             
-            LinearLayout toastLayout = new LinearLayout(this);
-            toastLayout.setOrientation(LinearLayout.VERTICAL);
-            toastLayout.setBackgroundColor(Color.parseColor("#222222"));
-            toastLayout.setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16));
-            toastLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
+            LinearLayout dialogLayout = new LinearLayout(this);
+            dialogLayout.setOrientation(LinearLayout.VERTICAL);
+            dialogLayout.setPadding(dpToPx(20), dpToPx(16), dpToPx(20), dpToPx(8));
             
             TextView headerView = new TextView(this);
             headerView.setText(success ? "📄 自动保存成功" : "❌ 保存失败");
-            headerView.setTextColor(Color.WHITE);
-            headerView.setTextSize(16);
+            headerView.setTextColor(success ? Color.parseColor("#5C61FF") : Color.parseColor("#FF6B6B"));
+            headerView.setTextSize(18);
             headerView.setTypeface(null, android.graphics.Typeface.BOLD);
-            headerView.setPadding(0, 0, 0, dpToPx(12));
-            toastLayout.addView(headerView);
+            headerView.setPadding(0, 0, 0, dpToPx(16));
+            dialogLayout.addView(headerView);
             
             ScrollView scrollView = new ScrollView(this);
             scrollView.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(180)));
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(200)));
             
             LinearLayout listLayout = new LinearLayout(this);
             listLayout.setOrientation(LinearLayout.VERTICAL);
@@ -755,53 +754,45 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
                 TextView itemView = new TextView(this);
                 String prefix = isCurrent && success ? "✅ " : "📄 ";
                 itemView.setText(prefix + record.filename);
-                itemView.setTextSize(13);
+                itemView.setTextSize(14);
                 
                 if (isCurrent && success) {
                     itemView.setTextColor(Color.parseColor("#5C61FF"));
                     itemView.setBackgroundColor(Color.parseColor("#1A1A3A"));
                     itemView.setTypeface(null, android.graphics.Typeface.BOLD);
                 } else {
-                    itemView.setTextColor(Color.parseColor("#AAAAAA"));
+                    itemView.setTextColor(Color.parseColor("#888888"));
                 }
                 
-                itemView.setPadding(dpToPx(12), dpToPx(8), dpToPx(12), dpToPx(8));
+                itemView.setPadding(dpToPx(12), dpToPx(10), dpToPx(12), dpToPx(10));
                 listLayout.addView(itemView);
                 
                 isCurrent = false;
             }
             
             scrollView.addView(listLayout);
-            toastLayout.addView(scrollView);
+            dialogLayout.addView(scrollView);
             
             TextView timerView = new TextView(this);
             timerView.setText("3 秒后自动关闭");
             timerView.setTextColor(Color.parseColor("#666666"));
             timerView.setTextSize(12);
-            timerView.setPadding(0, dpToPx(12), 0, 0);
-            toastLayout.addView(timerView);
+            timerView.setGravity(Gravity.CENTER);
+            timerView.setPadding(0, dpToPx(16), 0, 0);
+            dialogLayout.addView(timerView);
             
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                dpToPx(300), LinearLayout.LayoutParams.WRAP_CONTENT);
-            toastLayout.setLayoutParams(params);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog);
+            builder.setView(dialogLayout);
+            builder.setCancelable(true);
             
-            android.widget.FrameLayout.LayoutParams layoutParams = 
-                new android.widget.FrameLayout.LayoutParams(
-                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
-                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.gravity = Gravity.TOP | Gravity.END;
-            layoutParams.topMargin = dpToPx(90);
-            layoutParams.rightMargin = dpToPx(16);
-            
-            android.widget.FrameLayout rootLayout = findViewById(android.R.id.content);
-            rootLayout.addView(toastLayout, layoutParams);
-            
-            toastView = toastLayout;
+            saveResultDialog = builder.create();
+            saveResultDialog.getWindow().setBackgroundDrawableResource(android.R.drawable.dialog_holo_dark_frame);
+            saveResultDialog.show();
             
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                toastLayout.setVisibility(View.GONE);
-                rootLayout.removeView(toastLayout);
-                toastView = null;
+                if (saveResultDialog != null && saveResultDialog.isShowing()) {
+                    saveResultDialog.dismiss();
+                }
             }, 3000);
         });
     }
