@@ -1,15 +1,20 @@
 package cn.trae.mtc;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Insets;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowInsets;
@@ -24,11 +29,20 @@ import android.webkit.WebViewClient;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,12 +57,20 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private static final String KEY_SITES = "saved_sites";
     private static final String KEY_LANG = "saved_language";
     private static final String KEY_SAVES = "recent_saves";
+    private static final String KEY_MD5_CACHE = "md5_cache";
+    private static final String KEY_PERMISSION = "file_permission";
+    private static final String KEY_ALWAYS_REMIND = "always_remind";
+    private static final int REQUEST_STORAGE_PERMISSION = 1001;
+    private static final int MAX_MD5_CACHE = 100;
+    private static final int MAX_RECENT_SAVES = 10;
 
     private List<Site> sites;
     private Site activeSite;
     private String currentLanguage = "EN";
-    private List<String> recentSaves = new ArrayList<>();
+    private List<SaveRecord> recentSaves = new ArrayList<>();
+    private List<Md5CacheItem> md5Cache = new ArrayList<>();
     private Map<String, Integer> siteCounters = new HashMap<>();
+    private String pendingContent = null;
 
     private LinearLayout languageSelector;
     private TextView languageText;
@@ -57,6 +79,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private ClipboardManager clipboardManager;
     private SharedPreferences prefs;
     private View addButton;
+    private View toastView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,14 +112,42 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             sites = getDefaultSites();
         }
         
+        loadRecentSaves();
+        loadMd5Cache();
+    }
+
+    private void loadRecentSaves() {
+        recentSaves.clear();
         String savesJson = prefs.getString(KEY_SAVES, "[]");
         try {
             JSONArray array = new JSONArray(savesJson);
             for (int i = 0; i < array.length(); i++) {
-                recentSaves.add(array.getString(i));
+                JSONObject obj = array.getJSONObject(i);
+                recentSaves.add(new SaveRecord(
+                    obj.getString("filename"),
+                    obj.getLong("timestamp")
+                ));
             }
         } catch (Exception e) {
             recentSaves = new ArrayList<>();
+        }
+    }
+
+    private void loadMd5Cache() {
+        md5Cache.clear();
+        String cacheJson = prefs.getString(KEY_MD5_CACHE, "[]");
+        try {
+            JSONArray array = new JSONArray(cacheJson);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject obj = array.getJSONObject(i);
+                md5Cache.add(new Md5CacheItem(
+                    obj.getString("hash"),
+                    obj.getString("filename"),
+                    obj.getLong("timestamp")
+                ));
+            }
+        } catch (Exception e) {
+            md5Cache = new ArrayList<>();
         }
     }
 
@@ -438,22 +489,321 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         return name.substring(0, 1).toUpperCase();
     }
 
+    // ==================== Phase 2: 权限管理、MD5检测、提示框 ====================
+
     private void handleAutoSave(String content) {
         if (activeSite == null || content == null || content.trim().isEmpty()) {
             return;
         }
         
+        pendingContent = content;
+        
+        if (checkPermission()) {
+            processSave(content);
+        } else {
+            boolean alwaysRemind = prefs.getBoolean(KEY_ALWAYS_REMIND, true);
+            if (!alwaysRemind) {
+                return;
+            }
+            showPermissionDialog();
+        }
+    }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        } else {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) 
+                == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    private void showPermissionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("📁 需要文件存储权限");
+        builder.setMessage("是否允许保存文件？");
+        
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(dpToPx(24), dpToPx(16), dpToPx(24), dpToPx(8));
+        
+        CheckBox checkBox = new CheckBox(this);
+        checkBox.setText("每次都提醒");
+        checkBox.setChecked(prefs.getBoolean(KEY_ALWAYS_REMIND, true));
+        layout.addView(checkBox);
+        
+        builder.setView(layout);
+        
+        builder.setPositiveButton("允许", (dialog, which) -> {
+            prefs.edit().putBoolean(KEY_ALWAYS_REMIND, checkBox.isChecked()).apply();
+            prefs.edit().putString(KEY_PERMISSION, "granted").apply();
+            requestPermission();
+        });
+        
+        builder.setNegativeButton("拒绝", (dialog, which) -> {
+            prefs.edit().putBoolean(KEY_ALWAYS_REMIND, checkBox.isChecked()).apply();
+            prefs.edit().putString(KEY_PERMISSION, "denied").apply();
+        });
+        
+        builder.show();
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                android.content.Intent intent = new android.content.Intent(
+                    android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                    android.net.Uri.parse("package:" + getPackageName())
+                );
+                startActivity(intent);
+            } catch (Exception e) {
+                android.content.Intent intent = new android.content.Intent(
+                    android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                );
+                startActivity(intent);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                REQUEST_STORAGE_PERMISSION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (pendingContent != null) {
+                    processSave(pendingContent);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (pendingContent != null && checkPermission()) {
+            processSave(pendingContent);
+            pendingContent = null;
+        }
+    }
+
+    private void processSave(String content) {
+        String md5Hash = calculateMd5(content);
+        
+        Md5CacheItem existingItem = findInMd5Cache(md5Hash);
+        if (existingItem != null) {
+            showDuplicateDialog(content, md5Hash, existingItem.filename);
+            return;
+        }
+        
+        performSave(content, md5Hash);
+    }
+
+    private String calculateMd5(String content) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] digest = md.digest(content.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            return String.valueOf(content.hashCode());
+        }
+    }
+
+    private Md5CacheItem findInMd5Cache(String hash) {
+        for (Md5CacheItem item : md5Cache) {
+            if (item.hash.equals(hash)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    private void showDuplicateDialog(String content, String md5Hash, String existingFilename) {
+        new AlertDialog.Builder(this)
+            .setTitle("⚠️ 检测到重复内容")
+            .setMessage("此内容已保存过：\n" + existingFilename + "\n\n是否仍要保存？")
+            .setPositiveButton("保存", (dialog, which) -> {
+                performSave(content, md5Hash);
+            })
+            .setNegativeButton("取消", null)
+            .show();
+    }
+
+    private void performSave(String content, String md5Hash) {
         String filename = generateFilename(activeSite.name);
         
-        downloadMarkdown(filename, content);
+        boolean success = saveToFile(filename, content);
         
-        recentSaves.add(0, filename);
-        if (recentSaves.size() > 10) {
+        if (success) {
+            addToMd5Cache(md5Hash, filename);
+            addToRecentSaves(filename);
+            showSaveToast(filename, true);
+        } else {
+            showSaveToast(filename, false);
+        }
+    }
+
+    private boolean saveToFile(String filename, String content) {
+        try {
+            File dir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOCUMENTS), "MTC-Saves");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            
+            File file = new File(dir, filename);
+            FileOutputStream fos = new FileOutputStream(file);
+            OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+            writer.write(content);
+            writer.close();
+            fos.close();
+            
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void addToMd5Cache(String hash, String filename) {
+        md5Cache.add(0, new Md5CacheItem(hash, filename, System.currentTimeMillis()));
+        
+        while (md5Cache.size() > MAX_MD5_CACHE) {
+            md5Cache.remove(md5Cache.size() - 1);
+        }
+        
+        saveMd5Cache();
+    }
+
+    private void addToRecentSaves(String filename) {
+        recentSaves.add(0, new SaveRecord(filename, System.currentTimeMillis()));
+        
+        while (recentSaves.size() > MAX_RECENT_SAVES) {
             recentSaves.remove(recentSaves.size() - 1);
         }
-        saveRecentSaves();
         
-        showToastNotification(filename, true);
+        saveRecentSaves();
+    }
+
+    private void saveMd5Cache() {
+        try {
+            JSONArray array = new JSONArray();
+            for (Md5CacheItem item : md5Cache) {
+                JSONObject obj = new JSONObject();
+                obj.put("hash", item.hash);
+                obj.put("filename", item.filename);
+                obj.put("timestamp", item.timestamp);
+                array.put(obj);
+            }
+            prefs.edit().putString(KEY_MD5_CACHE, array.toString()).apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveRecentSaves() {
+        try {
+            JSONArray array = new JSONArray();
+            for (SaveRecord record : recentSaves) {
+                JSONObject obj = new JSONObject();
+                obj.put("filename", record.filename);
+                obj.put("timestamp", record.timestamp);
+                array.put(obj);
+            }
+            prefs.edit().putString(KEY_SAVES, array.toString()).apply();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showSaveToast(String currentFilename, boolean success) {
+        runOnUiThread(() -> {
+            if (toastView != null) {
+                toastView.setVisibility(View.GONE);
+            }
+            
+            LinearLayout toastLayout = new LinearLayout(this);
+            toastLayout.setOrientation(LinearLayout.VERTICAL);
+            toastLayout.setBackgroundColor(Color.parseColor("#222222"));
+            toastLayout.setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16));
+            toastLayout.setBackgroundResource(android.R.drawable.dialog_holo_dark_frame);
+            
+            TextView headerView = new TextView(this);
+            headerView.setText(success ? "📄 自动保存成功" : "❌ 保存失败");
+            headerView.setTextColor(Color.WHITE);
+            headerView.setTextSize(16);
+            headerView.setTypeface(null, android.graphics.Typeface.BOLD);
+            headerView.setPadding(0, 0, 0, dpToPx(12));
+            toastLayout.addView(headerView);
+            
+            ScrollView scrollView = new ScrollView(this);
+            scrollView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(180)));
+            
+            LinearLayout listLayout = new LinearLayout(this);
+            listLayout.setOrientation(LinearLayout.VERTICAL);
+            
+            boolean isCurrent = true;
+            for (SaveRecord record : recentSaves) {
+                TextView itemView = new TextView(this);
+                String prefix = isCurrent && success ? "✅ " : "📄 ";
+                itemView.setText(prefix + record.filename);
+                itemView.setTextSize(13);
+                
+                if (isCurrent && success) {
+                    itemView.setTextColor(Color.parseColor("#5C61FF"));
+                    itemView.setBackgroundColor(Color.parseColor("#1A1A3A"));
+                    itemView.setTypeface(null, android.graphics.Typeface.BOLD);
+                } else {
+                    itemView.setTextColor(Color.parseColor("#AAAAAA"));
+                }
+                
+                itemView.setPadding(dpToPx(12), dpToPx(8), dpToPx(12), dpToPx(8));
+                listLayout.addView(itemView);
+                
+                isCurrent = false;
+            }
+            
+            scrollView.addView(listLayout);
+            toastLayout.addView(scrollView);
+            
+            TextView timerView = new TextView(this);
+            timerView.setText("3 秒后自动关闭");
+            timerView.setTextColor(Color.parseColor("#666666"));
+            timerView.setTextSize(12);
+            timerView.setPadding(0, dpToPx(12), 0, 0);
+            toastLayout.addView(timerView);
+            
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                dpToPx(300), LinearLayout.LayoutParams.WRAP_CONTENT);
+            toastLayout.setLayoutParams(params);
+            
+            android.widget.FrameLayout.LayoutParams layoutParams = 
+                new android.widget.FrameLayout.LayoutParams(
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                    android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.gravity = Gravity.TOP | Gravity.END;
+            layoutParams.topMargin = dpToPx(90);
+            layoutParams.rightMargin = dpToPx(16);
+            
+            android.widget.FrameLayout rootLayout = findViewById(android.R.id.content);
+            rootLayout.addView(toastLayout, layoutParams);
+            
+            toastView = toastLayout;
+            
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                toastLayout.setVisibility(View.GONE);
+                rootLayout.removeView(toastLayout);
+                toastView = null;
+            }, 3000);
+        });
     }
 
     private String generateFilename(String siteName) {
@@ -464,38 +814,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         siteCounters.put(siteName + "-" + timeStr, counter + 1);
         
         return siteName + "-" + timeStr + "-" + counter + ".md";
-    }
-
-    private void downloadMarkdown(String filename, String content) {
-        String html = "<html>" +
-            "<head><title>Download</title></head>" +
-            "<body>" +
-            "<a id='downloadLink' href='data:text/markdown;charset=utf-8," + 
-            content.replace("'", "\\'").replace("\"", "\\\"") + 
-            "' download='" + filename + "'></a>" +
-            "<script>document.getElementById('downloadLink').click();</script>" +
-            "</body></html>";
-        
-        webView.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
-    }
-
-    private void showToastNotification(String filename, boolean success) {
-        runOnUiThread(() -> {
-            android.widget.Toast.makeText(
-                this,
-                success ? "保存成功 / Saved: " + filename : "保存失败 / Save failed",
-                android.widget.Toast.LENGTH_LONG
-            ).show();
-        });
-    }
-
-    private void saveRecentSaves() {
-        try {
-            JSONArray array = new JSONArray(recentSaves);
-            prefs.edit().putString(KEY_SAVES, array.toString()).apply();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private int dpToPx(int dp) {
@@ -511,6 +829,8 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             super.onBackPressed();
         }
     }
+
+    // ==================== 数据类 ====================
 
     static class Site {
         String name;
@@ -529,6 +849,28 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             this.icon = icon;
             this.color = color;
             this.allowWrap = allowWrap;
+        }
+    }
+
+    static class SaveRecord {
+        String filename;
+        long timestamp;
+
+        SaveRecord(String filename, long timestamp) {
+            this.filename = filename;
+            this.timestamp = timestamp;
+        }
+    }
+
+    static class Md5CacheItem {
+        String hash;
+        String filename;
+        long timestamp;
+
+        Md5CacheItem(String hash, String filename, long timestamp) {
+            this.hash = hash;
+            this.filename = filename;
+            this.timestamp = timestamp;
         }
     }
 }
