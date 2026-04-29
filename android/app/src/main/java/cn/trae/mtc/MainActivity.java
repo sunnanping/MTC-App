@@ -51,7 +51,7 @@ public class MainActivity extends BridgeActivity {
         
         sites.add(new SiteInfo("1", "TRAE SOLO", "https://solo.trae.cn", "T", "#5C61FF"));
         sites.add(new SiteInfo("2", "DeepSeek", "https://chat.deepseek.com/sign_in", "D", "#00D4AA"));
-        sites.add(new SiteInfo("3", "豆包", "https://www.doubao.com/chat", "豆", "#1890FF"));
+        sites.add(new SiteInfo("3", "Doubao", "https://www.doubao.com/chat", "D", "#1890FF"));
         sites.add(new SiteInfo("4", "Kimi", "https://www.kimi.com", "K", "#FF6B6B"));
         sites.add(new SiteInfo("5", "NotebookLM", "https://notebooklm.google.com", "N", "#4285F4"));
     }
@@ -230,7 +230,7 @@ public class MainActivity extends BridgeActivity {
             contentContainer.addView(webView, params);
         }
 
-        Toast.makeText(this, "已打开: " + site.name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Opened: " + site.name, Toast.LENGTH_SHORT).show();
     }
 
     private WebView getOrCreateWebView(SiteInfo site) {
@@ -249,7 +249,7 @@ public class MainActivity extends BridgeActivity {
     private void showSiteOptions(SiteInfo site) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle(site.name);
-        builder.setItems(new CharSequence[]{"编辑", "删除"}, (dialog, which) -> {
+        builder.setItems(new CharSequence[]{"Edit", "Delete"}, (dialog, which) -> {
             if (which == 0) {
                 showEditSiteDialog(site);
             } else {
@@ -261,24 +261,24 @@ public class MainActivity extends BridgeActivity {
 
     private void showAddSiteDialog() {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle("添加网站");
+        builder.setTitle("Add Site");
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(dpToPx(24), dpToPx(20), dpToPx(24), dpToPx(10));
 
         final TextView nameHint = new TextView(this);
-        nameHint.setText("网站名称");
+        nameHint.setText("Site Name");
         nameHint.setTextSize(12);
         nameHint.setTextColor(Color.GRAY);
         layout.addView(nameHint);
 
         final android.widget.EditText nameInput = new android.widget.EditText(this);
-        nameInput.setHint("例如: DeepSeek");
+        nameInput.setHint("e.g., DeepSeek");
         layout.addView(nameInput);
 
         final TextView urlHint = new TextView(this);
-        urlHint.setText("网站地址");
+        urlHint.setText("Site URL");
         urlHint.setTextSize(12);
         urlHint.setTextColor(Color.GRAY);
         urlHint.setPadding(0, dpToPx(16), 0, 0);
@@ -290,7 +290,7 @@ public class MainActivity extends BridgeActivity {
 
         builder.setView(layout);
 
-        builder.setPositiveButton("添加", (dialog, which) -> {
+        builder.setPositiveButton("Add", (dialog, which) -> {
             String name = nameInput.getText().toString().trim();
             String url = urlInput.getText().toString().trim();
 
@@ -307,16 +307,16 @@ public class MainActivity extends BridgeActivity {
                 );
                 sites.add(newSite);
                 renderNavIcons();
-                Toast.makeText(this, "已添加: " + name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Added: " + name, Toast.LENGTH_SHORT).show();
             }
         });
-        builder.setNegativeButton("取消", null);
+        builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
     private void showEditSiteDialog(SiteInfo site) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle("编辑网站");
+        builder.setTitle("Edit Site");
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -332,30 +332,30 @@ public class MainActivity extends BridgeActivity {
 
         builder.setView(layout);
 
-        builder.setPositiveButton("保存", (dialog, which) -> {
+        builder.setPositiveButton("Save", (dialog, which) -> {
             site.name = nameInput.getText().toString().trim();
             site.url = urlInput.getText().toString().trim();
             if (!site.name.isEmpty()) {
                 site.icon = site.name.substring(0, 1).toUpperCase();
             }
             renderNavIcons();
-            Toast.makeText(this, "已保存", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
         });
-        builder.setNegativeButton("取消", null);
+        builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
     private void showDeleteConfirm(SiteInfo site) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle("确认删除");
-        builder.setMessage("确定要删除 \"" + site.name + "\" 吗？");
-        builder.setPositiveButton("删除", (dialog, which) -> {
+        builder.setTitle("Confirm Delete");
+        builder.setMessage("Are you sure you want to delete \"" + site.name + "\"?");
+        builder.setPositiveButton("Delete", (dialog, which) -> {
             sites.remove(site);
             webViewMap.remove(site.id);
             renderNavIcons();
-            Toast.makeText(this, "已删除: " + site.name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Deleted: " + site.name, Toast.LENGTH_SHORT).show();
         });
-        builder.setNegativeButton("取消", null);
+        builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
@@ -399,7 +399,7 @@ public class MainActivity extends BridgeActivity {
         @JavascriptInterface
         public void extractContent() {
             runOnUiThread(() -> {
-                Toast.makeText(MainActivity.this, "内容提取功能开发中", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Content extraction feature in development", Toast.LENGTH_SHORT).show();
             });
         }
 
@@ -430,7 +430,7 @@ public class MainActivity extends BridgeActivity {
         activeWebView = null;
         activeSiteId = null;
 
-        Toast.makeText(this, "返回首页", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Back to home", Toast.LENGTH_SHORT).show();
     }
 
     private void configureExternalWebView(WebView webView) {
