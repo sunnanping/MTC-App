@@ -46,7 +46,7 @@ public class MainActivity extends BridgeActivity {
 
         sites.add(new SiteInfo("1", "TRAE SOLO", "https://solo.trae.cn", "T", "#5C61FF"));
         sites.add(new SiteInfo("2", "DeepSeek", "https://chat.deepseek.com", "D", "#00D4AA"));
-        sites.add(new SiteInfo("3", "Doubao", "https://www.doubao.com/chat", "豆", "#1890FF"));
+        sites.add(new SiteInfo("3", "Doubao", "https://www.doubao.com/chat", "D", "#1890FF"));
         sites.add(new SiteInfo("4", "Kimi", "https://www.kimi.com", "K", "#FF6B6B"));
         sites.add(new SiteInfo("5", "NotebookLM", "https://notebooklm.google.com", "N", "#4285F4"));
     }
