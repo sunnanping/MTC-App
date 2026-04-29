@@ -57,7 +57,12 @@ jobs:
         working-directory: ./android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon -Dorg.gradle.jvmargs="-Xmx4g" -Dorg.gradle.parallel=true
+          echo "Starting Gradle build..."
+          ./gradlew assembleDebug --stacktrace --info 2>&1 | tee build.log || {
+            echo "Build failed. Last 200 lines of log:"
+            tail -200 build.log
+            exit 1
+          }
           cp app/build/outputs/apk/debug/app-debug.apk ../MTC-App-v1.0.${{ github.run_number }}.apk
 
       - name: Create Release
