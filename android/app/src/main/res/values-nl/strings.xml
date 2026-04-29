@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">豆包</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">Laden...</string>
+    <string name="load_failed">Laden mislukt</string>
+    <string name="page_error">Paginafout</string>
+    <string name="return_home">Terug naar start</string>
+    <string name="extract_content">Inhoudsextractiefunctie in ontwikkeling</string>
+    
+    <string name="add_site">Site toevoegen</string>
+    <string name="site_name">Site-naam</string>
+    <string name="site_name_hint">bv. DeepSeek</string>
+    <string name="site_url">Site-URL</string>
+    <string name="site_url_hint">https://voorbeeld.com</string>
+    <string name="add">Toevoegen</string>
+    <string name="cancel">Annuleren</string>
+    <string name="added">Toegevoegd</string>
+    
+    <string name="edit_site">Site bewerken</string>
+    <string name="save">Opslaan</string>
+    <string name="saved">Opgeslagen</string>
+    
+    <string name="confirm_delete">Verwijdering bevestigen</string>
+    <string name="delete_message">Weet u zeker dat u</string>
+    <string name="delete">Verwijderen</string>
+    <string name="deleted">Verwijderd</string>
+    
+    <string name="edit">Bewerken</string>
+</resources>

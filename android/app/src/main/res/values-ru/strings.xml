@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">豆包</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">Загрузка...</string>
+    <string name="load_failed">Ошибка загрузки</string>
+    <string name="page_error">Ошибка страницы</string>
+    <string name="return_home">Вернуться на главную</string>
+    <string name="extract_content">Функция извлечения контента в разработке</string>
+    
+    <string name="add_site">Добавить сайт</string>
+    <string name="site_name">Название сайта</string>
+    <string name="site_name_hint">например: DeepSeek</string>
+    <string name="site_url">URL сайта</string>
+    <string name="site_url_hint">https://example.com</string>
+    <string name="add">Добавить</string>
+    <string name="cancel">Отмена</string>
+    <string name="added">Добавлено</string>
+    
+    <string name="edit_site">Редактировать сайт</string>
+    <string name="save">Сохранить</string>
+    <string name="saved">Сохранено</string>
+    
+    <string name="confirm_delete">Подтвердить удаление</string>
+    <string name="delete_message">Вы уверены, что хотите удалить</string>
+    <string name="delete">Удалить</string>
+    <string name="deleted">Удалено</string>
+    
+    <string name="edit">Редактировать</string>
+</resources>

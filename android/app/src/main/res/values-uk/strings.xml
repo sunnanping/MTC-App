@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">豆包</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">Завантаження...</string>
+    <string name="load_failed">Завантаження не вдалося</string>
+    <string name="page_error">Помилка сторінки</string>
+    <string name="return_home">Повернутися на головну</string>
+    <string name="extract_content">Функція екстракції контенту у розробці</string>
+    
+    <string name="add_site">Додати сайт</string>
+    <string name="site_name">Назва сайту</string>
+    <string name="site_name_hint">напр. DeepSeek</string>
+    <string name="site_url">URL сайту</string>
+    <string name="site_url_hint">https://приклад.com</string>
+    <string name="add">Додати</string>
+    <string name="cancel">Скасувати</string>
+    <string name="added">Додано</string>
+    
+    <string name="edit_site">Редагувати сайт</string>
+    <string name="save">Зберегти</string>
+    <string name="saved">Збережено</string>
+    
+    <string name="confirm_delete">Підтвердити видалення</string>
+    <string name="delete_message">Ви впевнені, що хочете видалити</string>
+    <string name="delete">Видалити</string>
+    <string name="deleted">Видалено</string>
+    
+    <string name="edit">Редагувати</string>
+</resources>

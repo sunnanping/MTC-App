@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">豆包</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">加载中...</string>
+    <string name="load_failed">加载失败</string>
+    <string name="page_error">页面错误</string>
+    <string name="return_home">返回首页</string>
+    <string name="extract_content">内容提取功能开发中</string>
+    
+    <string name="add_site">添加网站</string>
+    <string name="site_name">网站名称</string>
+    <string name="site_name_hint">例如: DeepSeek</string>
+    <string name="site_url">网站地址</string>
+    <string name="site_url_hint">https://example.com</string>
+    <string name="add">添加</string>
+    <string name="cancel">取消</string>
+    <string name="added">已添加</string>
+    
+    <string name="edit_site">编辑网站</string>
+    <string name="save">保存</string>
+    <string name="saved">已保存</string>
+    
+    <string name="confirm_delete">确认删除</string>
+    <string name="delete_message">确定要删除</string>
+    <string name="delete">删除</string>
+    <string name="deleted">已删除</string>
+    
+    <string name="edit">编辑</string>
+</resources>

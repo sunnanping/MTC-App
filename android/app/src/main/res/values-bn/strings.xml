@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">豆包</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">লোড হচ্ছে...</string>
+    <string name="load_failed">লোড ব্যর্থ</string>
+    <string name="page_error">পৃষ্ঠা ত্রুটি</string>
+    <string name="return_home">হোমে ফিরুন</string>
+    <string name="extract_content">কনটেন্ট এক্সট্রাকশন ফিচারটি ডেভেলপমেন্টে</string>
+    
+    <string name="add_site">সাইট যোগ করুন</string>
+    <string name="site_name">সাইটের নাম</string>
+    <string name="site_name_hint">উদাহরণ: DeepSeek</string>
+    <string name="site_url">সাইটের URL</string>
+    <string name="site_url_hint">https://example.com</string>
+    <string name="add">যোগ করুন</string>
+    <string name="cancel">বাতিল</string>
+    <string name="added">যোগ করা হয়েছে</string>
+    
+    <string name="edit_site">সাইট সম্পাদনা করুন</string>
+    <string name="save">সংরক্ষণ করুন</string>
+    <string name="saved">সংরক্ষণ করা হয়েছে</string>
+    
+    <string name="confirm_delete">মুছে ফেলতে নিশ্চিত</string>
+    <string name="delete_message">আপনি কি</string>
+    <string name="delete">মুছে ফেলুন</string>
+    <string name="deleted">মুছে ফেলা হয়েছে</string>
+    
+    <string name="edit">সম্পাদনা করুন</string>
+</resources>

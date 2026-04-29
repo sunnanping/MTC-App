@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">豆包</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">読み込み中...</string>
+    <string name="load_failed">読み込みに失敗しました</string>
+    <string name="page_error">ページエラー</string>
+    <string name="return_home">ホームに戻る</string>
+    <string name="extract_content">コンテンツ抽出機能は開発中です</string>
+    
+    <string name="add_site">サイトを追加</string>
+    <string name="site_name">サイト名</string>
+    <string name="site_name_hint">例: DeepSeek</string>
+    <string name="site_url">サイトURL</string>
+    <string name="site_url_hint">https://example.com</string>
+    <string name="add">追加</string>
+    <string name="cancel">キャンセル</string>
+    <string name="added">追加されました</string>
+    
+    <string name="edit_site">サイトを編集</string>
+    <string name="save">保存</string>
+    <string name="saved">保存されました</string>
+    
+    <string name="confirm_delete">削除を確認</string>
+    <string name="delete_message">本当に削除しますか</string>
+    <string name="delete">削除</string>
+    <string name="deleted">削除されました</string>
+    
+    <string name="edit">編集</string>
+</resources>

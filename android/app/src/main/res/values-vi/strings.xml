@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">豆包</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">Đang tải...</string>
+    <string name="load_failed">Tải thất bại</string>
+    <string name="page_error">Lỗi trang</string>
+    <string name="return_home">Quay về trang chủ</string>
+    <string name="extract_content">Tính năng trích xuất nội dung đang phát triển</string>
+    
+    <string name="add_site">Thêm trang web</string>
+    <string name="site_name">Tên trang web</string>
+    <string name="site_name_hint">vd., DeepSeek</string>
+    <string name="site_url">URL trang web</string>
+    <string name="site_url_hint">https://example.com</string>
+    <string name="add">Thêm</string>
+    <string name="cancel">Hủy</string>
+    <string name="added">Đã thêm</string>
+    
+    <string name="edit_site">Chỉnh sửa trang web</string>
+    <string name="save">Lưu</string>
+    <string name="saved">Đã lưu</string>
+    
+    <string name="confirm_delete">Xác nhận xóa</string>
+    <string name="delete_message">Bạn có chắc chắn muốn xóa</string>
+    <string name="delete">Xóa</string>
+    <string name="deleted">Đã xóa</string>
+    
+    <string name="edit">Chỉnh sửa</string>
+</resources>
