@@ -48,6 +48,9 @@
     .back-button.show { display: flex; }
     .back-button:hover { background: #4C51EF; transform: translateX(-50%) scale(1.05); }
     .back-button svg { width: 18px; height: 18px; margin-right: 6px; }
+    .extract-btn { position: fixed; bottom: 24px; right: 24px; z-index: 250; background: #00D4AA; color: white; border: none; border-radius: 50px; padding: 12px 16px; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 212, 170, 0.35); transition: all 0.2s; display: none; }
+    .extract-btn.show { display: block; }
+    .extract-btn:hover { background: #00B494; transform: scale(1.05); }
   </style>
 </head>
 <body>
@@ -70,6 +73,8 @@
       </svg>
       返回首页
     </button>
+
+    <button class="extract-btn" id="extractBtn">📋 提取内容</button>
 
     <div class="modal" id="siteModal">
       <div class="modal-content">
@@ -162,16 +167,25 @@
 
     // 检查是否在 Android 环境中
     function isAndroid() {
-      return typeof AndroidBridge !== 'undefined';
+      return typeof AppBridge !== 'undefined';
     }
 
     // 加载网站
-    function loadWebsite(url) {
+    function loadWebsite(site) {
       if (isAndroid()) {
-        AndroidBridge.loadUrl(url);
+        AppBridge.loadExternalSite(site.id, site.url);
       } else {
         // 在浏览器中测试时，打开新窗口
-        window.open(url, '_blank');
+        window.open(site.url, '_blank');
+      }
+    }
+
+    // 提取内容
+    function extractContent() {
+      if (isAndroid()) {
+        AppBridge.extractContent();
+      } else {
+        alert('内容提取功能仅在App中可用');
       }
     }
 
@@ -193,6 +207,7 @@
     const ctxEdit = document.getElementById('ctxEdit');
     const ctxDelete = document.getElementById('ctxDelete');
     const backButton = document.getElementById('backButton');
+    const extractBtn = document.getElementById('extractBtn');
 
     let websites = [];
     let activeSite = null;
@@ -229,7 +244,8 @@
       activeSite = site;
       renderNav();
       showBackButton();
-      loadWebsite(site.url);
+      showExtractButton();
+      loadWebsite(site);
       hideContextMenu();
     }
 
@@ -241,13 +257,22 @@
       backButton.classList.remove('show');
     }
 
+    function showExtractButton() {
+      extractBtn.classList.add('show');
+    }
+
+    function hideExtractButton() {
+      extractBtn.classList.remove('show');
+    }
+
     function handleBackClick() {
       if (isAndroid()) {
-        AndroidBridge.returnToHome();
+        AppBridge.returnToHome();
       }
       activeSite = null;
       renderNav();
       hideBackButton();
+      hideExtractButton();
     }
 
     function showAddModal() {
@@ -344,6 +369,7 @@
     ctxEdit.addEventListener('click', () => { if (contextSite) { showEditModal(contextSite); } });
     ctxDelete.addEventListener('click', () => { if (contextSite) { showDeleteConfirm(contextSite); } });
     backButton.addEventListener('click', handleBackClick);
+    extractBtn.addEventListener('click', extractContent);
     
     document.addEventListener('contextmenu', (e) => {
       e.preventDefault();
