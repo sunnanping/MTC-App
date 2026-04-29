@@ -21,6 +21,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -197,11 +198,13 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         JSONArray array = new JSONArray(json);
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
+            boolean allowWrap = obj.optBoolean("allowWrap", false);
             sites.add(new Site(
                 obj.getString("name"),
                 obj.getString("url"),
                 obj.getString("icon"),
-                obj.getString("color")
+                obj.getString("color"),
+                allowWrap
             ));
         }
     }
@@ -215,6 +218,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
                 obj.put("url", site.url);
                 obj.put("icon", site.icon);
                 obj.put("color", site.color);
+                obj.put("allowWrap", site.allowWrap);
                 array.put(obj);
             }
             prefs.edit().putString(KEY_SITES, array.toString()).apply();
@@ -233,21 +237,22 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         }
     }
 
+    private static final int CIRCLE_SIZE_DP = 52;
+
     private TextView createSiteIcon(Site site) {
         TextView textView = new TextView(this);
         
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-            dpToPx(48),
-            dpToPx(48)
-        );
+        int circleSize = dpToPx(CIRCLE_SIZE_DP);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(circleSize, circleSize);
         params.setMargins(0, 0, dpToPx(12), 0);
         textView.setLayoutParams(params);
         
         textView.setGravity(Gravity.CENTER);
         textView.setText(site.icon);
         textView.setTextColor(Color.WHITE);
-        textView.setTextSize(18);
         textView.setTypeface(null, android.graphics.Typeface.BOLD);
+        
+        updateIconTextSize(textView, site.icon, site.allowWrap);
         
         textView.setBackgroundResource(R.drawable.circle_bg);
         
@@ -271,6 +276,32 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         });
         
         return textView;
+    }
+
+    private void updateIconTextSize(TextView textView, String text, boolean allowWrap) {
+        if (text == null || text.isEmpty()) {
+            textView.setTextSize(18);
+            return;
+        }
+
+        int charCount = text.length();
+        int maxLines = allowWrap ? 2 : 1;
+        
+        float fontSize;
+        
+        if (charCount <= 1) {
+            fontSize = 24;
+        } else if (charCount == 2) {
+            fontSize = 18;
+        } else if (charCount <= 4) {
+            fontSize = allowWrap ? 14 : 12;
+        } else {
+            fontSize = allowWrap ? 12 : 10;
+        }
+
+        textView.setTextSize(fontSize);
+        textView.setMaxLines(maxLines);
+        textView.setEllipsize(null);
     }
 
     private void selectSite(Site site) {
@@ -320,28 +351,53 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         EditText nameInput = new EditText(this);
         nameInput.setHint("网站名称");
         if (editSite != null) nameInput.setText(editSite.name);
+        layout.addView(nameInput);
         
         EditText urlInput = new EditText(this);
         urlInput.setHint("网址（https://...）");
         urlInput.setInputType(EditorInfo.TYPE_TEXT_VARIATION_URI);
         if (editSite != null) urlInput.setText(editSite.url);
-        
-        layout.addView(nameInput);
         layout.addView(urlInput);
+        
+        TextView iconHint = new TextView(this);
+        iconHint.setText("网站简写（1-4个字符）");
+        iconHint.setTextSize(12);
+        iconHint.setTextColor(Color.GRAY);
+        iconHint.setPadding(0, dpToPx(16), 0, 0);
+        layout.addView(iconHint);
+        
+        EditText iconInput = new EditText(this);
+        iconInput.setHint("例如：D 或 豆");
+        iconInput.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(4)});
+        if (editSite != null) iconInput.setText(editSite.icon);
+        layout.addView(iconInput);
+        
+        CheckBox wrapCheckBox = new CheckBox(this);
+        wrapCheckBox.setText("允许换行显示");
+        wrapCheckBox.setPadding(0, dpToPx(16), 0, 0);
+        if (editSite != null) wrapCheckBox.setChecked(editSite.allowWrap);
+        layout.addView(wrapCheckBox);
         
         builder.setView(layout);
         
         builder.setPositiveButton("保存", (dialog, which) -> {
             String name = nameInput.getText().toString().trim();
             String url = urlInput.getText().toString().trim();
+            String icon = iconInput.getText().toString().trim();
+            boolean allowWrap = wrapCheckBox.isChecked();
             
             if (!name.isEmpty() && !url.isEmpty()) {
+                if (icon.isEmpty()) {
+                    icon = getIconFromName(name);
+                }
+                
                 if (editSite != null) {
                     editSite.name = name;
                     editSite.url = url;
-                    editSite.icon = getIconFromName(name);
+                    editSite.icon = icon;
+                    editSite.allowWrap = allowWrap;
                 } else {
-                    sites.add(new Site(name, url, getIconFromName(name), "#5C61FF"));
+                    sites.add(new Site(name, url, icon, "#5C61FF", allowWrap));
                 }
                 saveSitesToPrefs();
                 renderSites();
@@ -461,12 +517,18 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         String url;
         String icon;
         String color;
+        boolean allowWrap;
 
         Site(String name, String url, String icon, String color) {
+            this(name, url, icon, color, false);
+        }
+
+        Site(String name, String url, String icon, String color, boolean allowWrap) {
             this.name = name;
             this.url = url;
             this.icon = icon;
             this.color = color;
+            this.allowWrap = allowWrap;
         }
     }
 }
