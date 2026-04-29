@@ -598,7 +598,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if (pendingContent != null && checkPermission()) {
             processSave(pendingContent);
