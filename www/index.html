@@ -165,28 +165,43 @@
       }
     }
 
-    // 检查是否在 Android 环境中
-    function isAndroid() {
-      return typeof AppBridge !== 'undefined';
+    function createWebView(url) {
+      const iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = 'none';
+      iframe.style.background = 'white';
+      iframe.setAttribute('allow', 'geolocation; microphone; camera');
+      return iframe;
     }
 
     // 加载网站
     function loadWebsite(site) {
-      if (isAndroid()) {
-        AppBridge.loadExternalSite(site.id, site.url);
-      } else {
-        // 在浏览器中测试时，打开新窗口
-        window.open(site.url, '_blank');
-      }
+      const contentArea = document.getElementById('contentArea');
+      contentArea.innerHTML = '';
+      
+      const iframe = createWebView(site.url);
+      contentArea.appendChild(iframe);
+      
+      contentArea.style.background = 'white';
+    }
+
+    // 返回首页
+    function returnToHome() {
+      const contentArea = document.getElementById('contentArea');
+      contentArea.innerHTML = `
+        <div class="welcome-text">
+          <div style="font-size: 18px; margin-bottom: 8px;">选择一个网站开始使用</div>
+          <div style="font-size: 13px; color: #999;">点击图标打开相应的AI聊天服务</div>
+        </div>
+      `;
+      contentArea.style.background = 'white';
     }
 
     // 提取内容
     function extractContent() {
-      if (isAndroid()) {
-        AppBridge.extractContent();
-      } else {
-        alert('内容提取功能仅在App中可用');
-      }
+      alert('内容提取功能开发中');
     }
 
     const navScroll = document.getElementById('navScroll');
@@ -266,9 +281,7 @@
     }
 
     function handleBackClick() {
-      if (isAndroid()) {
-        AppBridge.returnToHome();
-      }
+      returnToHome();
       activeSite = null;
       renderNav();
       hideBackButton();
