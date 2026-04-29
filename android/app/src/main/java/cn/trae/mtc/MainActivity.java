@@ -63,7 +63,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private static final int REQUEST_STORAGE_PERMISSION = 1001;
     private static final int MAX_MD5_CACHE = 100;
     private static final int MAX_RECENT_SAVES = 10;
-    private static final int MIN_CONTENT_LENGTH = 200;
+    private static final int MIN_CONTENT_LENGTH = 500;
 
     private List<Site> sites;
     private Site activeSite;
@@ -376,14 +376,36 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             getString(R.string.language_ar)
         };
         
+        String[] languageCodes = {"EN", "中文", "日本語", "한국어", "Español", "Français", "Deutsch", "Português", "Русский", "العربية"};
+        
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.select_language))
             .setItems(languages, (dialog, which) -> {
-                currentLanguage = languages[which];
+                currentLanguage = languageCodes[which];
                 languageText.setText(currentLanguage);
                 prefs.edit().putString(KEY_LANG, currentLanguage).apply();
+                
+                injectLanguageToWebView(currentLanguage);
             })
             .show();
+    }
+
+    private void injectLanguageToWebView(String language) {
+        if (webView != null) {
+            String js = String.format(
+                "if(window.MTCApp && window.MTCApp.onLanguageChange) {" +
+                "  window.MTCApp.onLanguageChange('%s');" +
+                "} else {" +
+                "  window.mtcLanguage = '%s';" +
+                "}",
+                language, language
+            );
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                webView.evaluateJavascript(js, null);
+            } else {
+                webView.loadUrl("javascript:" + js);
+            }
+        }
     }
 
     private void showAddSiteDialog() {
