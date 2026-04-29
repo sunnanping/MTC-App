@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">Doubao</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">Dang tai...</string>
+    <string name="load_failed">Tai that bai</string>
+    <string name="page_error">Loi trang</string>
+    <string name="return_home">Ve trang chu</string>
+    <string name="extract_content">Tinh nang trich xuat noi dung dang phat trien</string>
+    
+    <string name="add_site">Them trang</string>
+    <string name="site_name">Ten trang</string>
+    <string name="site_name_hint">vi du, DeepSeek</string>
+    <string name="site_url">URL trang</string>
+    <string name="site_url_hint">https://vi-du.com</string>
+    <string name="add">Them</string>
+    <string name="cancel">Huy</string>
+    <string name="added">Da them</string>
+    
+    <string name="edit_site">Sua trang</string>
+    <string name="save">Luu</string>
+    <string name="saved">Da luu</string>
+    
+    <string name="confirm_delete">Xac nhan xoa</string>
+    <string name="delete_message">Ban co chac chan muon xoa</string>
+    <string name="delete">Xoa</string>
+    <string name="deleted">Da xoa</string>
+    
+    <string name="edit">Sua</string>
+</resources>

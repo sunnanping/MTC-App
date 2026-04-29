@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">Doubao</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">Zagruzka...</string>
+    <string name="load_failed">Ne udalos zagruzit</string>
+    <string name="page_error">Oshibka stranicy</string>
+    <string name="return_home">Vernutsya na glavnuyu</string>
+    <string name="extract_content">Funkciya izvlecheniya kontenta v razrabotke</string>
+    
+    <string name="add_site">Dobavit sait</string>
+    <string name="site_name">Nazvanie saita</string>
+    <string name="site_name_hint">naprimer, DeepSeek</string>
+    <string name="site_url">URL saita</string>
+    <string name="site_url_hint">https://primer.com</string>
+    <string name="add">Dobavit</string>
+    <string name="cancel">Otmenca</string>
+    <string name="added">Dobavleno</string>
+    
+    <string name="edit_site">Redaktirovatsait</string>
+    <string name="save">Sokhranit</string>
+    <string name="saved">Sokhraneno</string>
+    
+    <string name="confirm_delete">Podtverdit udalenie</string>
+    <string name="delete_message">Vy uvereny, chto xotite udalit</string>
+    <string name="delete">Udalit</string>
+    <string name="deleted">Udalenno</string>
+    
+    <string name="edit">Redaktirovat</string>
+</resources>
