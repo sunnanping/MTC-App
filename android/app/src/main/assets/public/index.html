@@ -9,6 +9,10 @@
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1A1A1A; color: #FFF; height: 100vh; overflow: hidden; }
     #root { width: 100%; height: 100%; }
     .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(26, 26, 26, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #333; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+    .lang-selector { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #333; border-radius: 24px; cursor: pointer; flex-shrink: 0; }
+    .lang-selector:hover { background: #444; }
+    .lang-icon { font-size: 20px; }
+    .lang-text { font-size: 14px; font-weight: 500; }
     .nav-scroll { flex: 1; overflow-x: auto; white-space: nowrap; }
     .nav-scroll::-webkit-scrollbar { display: none; }
     .site-icon { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 50%; color: white; font-weight: bold; font-size: 18px; cursor: pointer; transition: all 0.2s; position: relative; margin-right: 12px; }
@@ -52,11 +56,28 @@
     .error-overlay.show { display: flex; }
     .error-icon { font-size: 48px; margin-bottom: 16px; }
     .error-text { color: #888; margin-bottom: 16px; }
+    .save-toast { position: fixed; top: 90px; right: 16px; background: #222; border-radius: 12px; padding: 16px; z-index: 250; min-width: 280px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .toast-header { font-size: 16px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .toast-list { max-height: 180px; overflow-y: auto; }
+    .toast-item { padding: 8px 12px; border-radius: 6px; margin-bottom: 4px; font-size: 13px; color: #AAA; }
+    .toast-item.current { background: rgba(92,97,255,0.2); color: #5C61FF; font-weight: 500; }
+    .toast-timer { margin-top: 12px; font-size: 12px; color: #666; }
+    .lang-list { max-height: 300px; overflow-y: auto; }
+    .lang-item { padding: 12px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .lang-item:hover { background: #333; }
+    .lang-item.active { background: rgba(92,97,255,0.2); color: #5C61FF; }
+    .lang-item-name { font-size: 14px; }
+    .lang-item-native { font-size: 12px; color: #888; }
   </style>
 </head>
 <body>
   <div id="root">
     <div class="navbar">
+      <div class="lang-selector" id="langSelector">
+        <span class="lang-icon">🌐</span>
+        <span class="lang-text" id="langText">EN</span>
+      </div>
       <div class="nav-scroll" id="navScroll"></div>
       <div class="add-btn" id="addBtn">+</div>
     </div>
@@ -95,6 +116,16 @@
       </div>
     </div>
 
+    <div class="modal" id="langModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>选择语言</h2>
+          <span class="modal-close" id="langModalClose">×</span>
+        </div>
+        <div class="lang-list" id="langList"></div>
+      </div>
+    </div>
+
     <div class="delete-confirm modal" id="deleteModal">
       <div class="modal-content">
         <div class="modal-header">
@@ -115,9 +146,24 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
     const STORAGE_KEY = 'mtc_websites';
+    const LANG_KEY = 'mtc_language';
+    const SAVES_KEY = 'mtc_saves';
     const colors = ['#5C61FF', '#00D4AA', '#1890FF', '#FF6B6B', '#4285F4', '#FF9800', '#E91E63', '#9C27B0', '#00BCD4', '#8BC34A'];
+    
+    const languages = [
+      { code: 'en', name: 'English', native: 'English' },
+      { code: 'zh', name: 'Chinese', native: '中文' },
+      { code: 'ja', name: 'Japanese', native: '日本語' },
+      { code: 'ko', name: 'Korean', native: '한국어' },
+      { code: 'es', name: 'Spanish', native: 'Español' },
+      { code: 'fr', name: 'French', native: 'Français' },
+      { code: 'de', name: 'German', native: 'Deutsch' },
+      { code: 'pt', name: 'Portuguese', native: 'Português' },
+      { code: 'ru', name: 'Russian', native: 'Русский' },
+      { code: 'ar', name: 'Arabic', native: 'العربية' },
+    ];
     
     const initialWebsites = [
       { id: '1', name: 'TRAE SOLO', url: 'https://solo.trae.cn', icon: 'T', color: '#5C61FF', order: 1 },
@@ -138,6 +184,36 @@
 
     function saveWebsites(websites) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(websites));
+    }
+
+    function getLanguage() {
+      try {
+        return localStorage.getItem(LANG_KEY) || 'en';
+      } catch {
+        return 'en';
+      }
+    }
+
+    function saveLanguage(code) {
+      localStorage.setItem(LANG_KEY, code);
+    }
+
+    function getRecentSaves() {
+      try {
+        const data = localStorage.getItem(SAVES_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function addRecentSave(filename) {
+      const saves = getRecentSaves();
+      saves.unshift({ filename, timestamp: Date.now() });
+      if (saves.length > 10) {
+        saves.splice(10);
+      }
+      localStorage.setItem(SAVES_KEY, JSON.stringify(saves));
     }
 
     function generateId() {
@@ -163,6 +239,81 @@
       }
     }
 
+    function generateFilename(siteName) {
+      const date = new Date();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      const hh = String(date.getHours()).padStart(2, '0');
+      const min = String(date.getMinutes()).padStart(2, '0');
+      const mmddhhmm = `${mm}${dd}${hh}${min}`;
+      
+      const saves = getRecentSaves();
+      const samePrefix = saves.filter(s => s.filename.startsWith(`${siteName}-${mmddhhmm}`));
+      const inc = samePrefix.length + 1;
+      
+      return `${siteName}-${mmddhhmm}-${inc}.md`;
+    }
+
+    function showSaveToast(filename, success) {
+      const existingToast = document.querySelector('.save-toast');
+      if (existingToast) {
+        existingToast.remove();
+      }
+
+      const toast = document.createElement('div');
+      toast.className = 'save-toast';
+      
+      const saves = getRecentSaves();
+      const savesHtml = saves.map((s, idx) => {
+        const isCurrent = idx === 0 && success;
+        return `<div class="toast-item ${isCurrent ? 'current' : ''}">${isCurrent ? '✅ ' : '📄 '}${s.filename}</div>`;
+      }).join('');
+
+      toast.innerHTML = `
+        <div class="toast-header">${success ? '📄 自动保存成功' : '❌ 保存失败'}</div>
+        <div class="toast-list">
+          ${savesHtml}
+        </div>
+        <div class="toast-timer">3 秒后自动关闭</div>
+      `;
+      
+      document.body.appendChild(toast);
+      
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    async function handleAutoSave() {
+      if (!activeSite) return;
+
+      let clipboardText = '';
+      try {
+        clipboardText = await navigator.clipboard.readText();
+      } catch (e) {
+        console.log('Clipboard access failed');
+        return;
+      }
+
+      if (!clipboardText.trim()) return;
+
+      const filename = generateFilename(activeSite.name);
+      
+      try {
+        const blob = new Blob([clipboardText], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        addRecentSave(filename);
+        showSaveToast(filename, true);
+      } catch (e) {
+        console.error('Save failed:', e);
+        showSaveToast(filename, false);
+      }
+    }
+
     const navScroll = document.getElementById('navScroll');
     const addBtn = document.getElementById('addBtn');
     const mainFrame = document.getElementById('mainFrame');
@@ -183,11 +334,41 @@
     const contextMenu = document.getElementById('contextMenu');
     const ctxEdit = document.getElementById('ctxEdit');
     const ctxDelete = document.getElementById('ctxDelete');
+    const langSelector = document.getElementById('langSelector');
+    const langText = document.getElementById('langText');
+    const langModal = document.getElementById('langModal');
+    const langModalClose = document.getElementById('langModalClose');
+    const langList = document.getElementById('langList');
 
     let websites = [];
     let activeSite = null;
     let editingSite = null;
     let contextSite = null;
+    let currentLanguage = 'en';
+
+    function renderLangList() {
+      langList.innerHTML = '';
+      languages.forEach(lang => {
+        const item = document.createElement('div');
+        item.className = `lang-item ${lang.code === currentLanguage ? 'active' : ''}`;
+        item.innerHTML = `
+          <div>
+            <div class="lang-item-name">${lang.native}</div>
+            <div class="lang-item-native">${lang.name}</div>
+          </div>
+          ${lang.code === currentLanguage ? '✓' : ''}
+        `;
+        item.addEventListener('click', () => selectLanguage(lang));
+        langList.appendChild(item);
+      });
+    }
+
+    function selectLanguage(lang) {
+      currentLanguage = lang.code;
+      langText.textContent = lang.code.toUpperCase();
+      saveLanguage(lang.code);
+      langModal.classList.remove('show');
+    }
 
     function renderNav() {
       navScroll.innerHTML = '';
@@ -346,13 +527,22 @@
     deleteConfirm.addEventListener('click', deleteSite);
     ctxEdit.addEventListener('click', () => { if (contextSite) { showEditModal(contextSite); } });
     ctxDelete.addEventListener('click', () => { if (contextSite) { showDeleteConfirm(contextSite); } });
-    
+    langSelector.addEventListener('click', () => {
+      renderLangList();
+      langModal.classList.add('show');
+    });
+    langModalClose.addEventListener('click', () => langModal.classList.remove('show'));
+
     document.addEventListener('click', (e) => {
       if (!contextMenu.contains(e.target) && !e.target.classList.contains('site-icon')) {
         hideContextMenu();
       }
     });
 
+    window.addEventListener('nativecopy', handleAutoSave);
+
+    currentLanguage = getLanguage();
+    langText.textContent = currentLanguage.toUpperCase();
     websites = getWebsites();
     renderNav();
     if (websites.length > 0) {

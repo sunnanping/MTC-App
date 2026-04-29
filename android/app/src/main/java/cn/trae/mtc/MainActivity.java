@@ -1,5 +1,7 @@
 package cn.trae.mtc;
 
+import android.content.ClipboardManager;
+import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,13 @@ import androidx.core.graphics.Insets;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
+    private ClipboardManager clipboardManager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setupClipboardListener();
+    }
 
     @Override
     public void onStart() {
@@ -31,5 +40,25 @@ public class MainActivity extends BridgeActivity {
                 });
             }
         }
+    }
+
+    private void setupClipboardListener() {
+        clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        clipboardManager.addPrimaryClipChangedListener(new OnPrimaryClipChangedListener() {
+            @Override
+            public void onPrimaryClipChanged() {
+                notifyCopyToJS();
+            }
+        });
+    }
+
+    private void notifyCopyToJS() {
+        runOnUiThread(() -> {
+            if (bridge != null && bridge.getWebView() != null) {
+                bridge.getWebView().evaluateJavascript(
+                    "window.dispatchEvent(new CustomEvent('nativecopy'));", null
+                );
+            }
+        });
     }
 }
