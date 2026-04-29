@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    
+    <string name="site_trae">TRAE SOLO</string>
+    <string name="site_deepseek">DeepSeek</string>
+    <string name="site_doubao">Doubao</string>
+    <string name="site_kimi">Kimi</string>
+    <string name="site_notebooklm">NotebookLM</string>
+    
+    <string name="loading">Cargando...</string>
+    <string name="load_failed">Error al cargar</string>
+    <string name="page_error">Error de pagina</string>
+    <string name="return_home">Volver al inicio</string>
+    <string name="extract_content">Funcion de extraccion de contenido en desarrollo</string>
+    
+    <string name="add_site">Agregar sitio</string>
+    <string name="site_name">Nombre del sitio</string>
+    <string name="site_name_hint">ej., DeepSeek</string>
+    <string name="site_url">URL del sitio</string>
+    <string name="site_url_hint">https://ejemplo.com</string>
+    <string name="add">Agregar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="added">Agregado</string>
+    
+    <string name="edit_site">Editar sitio</string>
+    <string name="save">Guardar</string>
+    <string name="saved">Guardado</string>
+    
+    <string name="confirm_delete">Confirmar eliminacion</string>
+    <string name="delete_message">Esta seguro de que desea eliminar</string>
+    <string name="delete">Eliminar</string>
+    <string name="deleted">Eliminado</string>
+    
+    <string name="edit">Editar</string>
+</resources>
