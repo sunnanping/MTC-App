@@ -38,13 +38,13 @@
     <string name="seconds_close">%d seconds to close</string>
     
     <string name="language_en">EN</string>
-    <string name="language_zh">中文</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_ko">한국어</string>
-    <string name="language_es">Español</string>
-    <string name="language_fr">Français</string>
-    <string name="language_de">Deutsch</string>
-    <string name="language_pt">Português</string>
-    <string name="language_ru">Русский</string>
-    <string name="language_ar">العربية</string>
+    <string name="language_zh">ZH</string>
+    <string name="language_ja">JA</string>
+    <string name="language_ko">KO</string>
+    <string name="language_es">ES</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">DE</string>
+    <string name="language_pt">PT</string>
+    <string name="language_ru">RU</string>
+    <string name="language_ar">AR</string>
 </resources>

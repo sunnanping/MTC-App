@@ -232,7 +232,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         List<Site> defaultSites = new ArrayList<>();
         defaultSites.add(new Site("TRAE SOLO", "https://solo.trae.cn", "T", "#5C61FF"));
         defaultSites.add(new Site("DeepSeek", "https://chat.deepseek.com", "D", "#00D4AA"));
-        defaultSites.add(new Site("豆包", "https://www.doubao.com/chat", "豆", "#1890FF"));
+        defaultSites.add(new Site("Doubao", "https://www.doubao.com/chat", "D", "#1890FF"));
         defaultSites.add(new Site("Kimi", "https://www.kimi.com", "K", "#FF6B6B"));
         defaultSites.add(new Site("NotebookLM", "https://notebooklm.google.com", "N", "#4285F4"));
         return defaultSites;
@@ -501,7 +501,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         return name.substring(0, 1).toUpperCase();
     }
 
-    // ==================== Phase 2: 权限管理、MD5检测、提示框 ====================
+    // ==================== Phase 2: Permission, MD5, Dialog ====================
 
     private void handleAutoSave(String content) {
         if (activeSite == null || content == null || content.trim().isEmpty()) {
@@ -769,7 +769,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             boolean isCurrent = true;
             for (SaveRecord record : recentSaves) {
                 TextView itemView = new TextView(this);
-                String prefix = isCurrent && success ? "✅ " : "📄 ";
+                String prefix = isCurrent && success ? "[*] " : "[-] ";
                 itemView.setText(prefix + record.filename);
                 itemView.setTextSize(14);
                 
@@ -838,7 +838,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         }
     }
 
-    // ==================== 数据类 ====================
+    // ==================== Data Classes ====================
 
     static class Site {
         String name;

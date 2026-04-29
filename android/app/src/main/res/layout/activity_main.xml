@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- 顶部导航栏 -->
+    <!-- Top Navigation Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:padding="12dp"
         android:background="#1A1A1A">
 
-        <!-- 语言选择按钮 -->
+        <!-- Language Selector Button -->
         <LinearLayout
             android:id="@+id/languageSelector"
             android:layout_width="wrap_content"
@@ -28,8 +28,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="🌐"
-                android:textSize="20sp"/>
+                android:text="LANG"
+                android:textSize="12sp"
+                android:textColor="#AAAAAA"/>
 
             <TextView
                 android:id="@+id/languageText"
@@ -43,7 +44,7 @@
 
         </LinearLayout>
 
-        <!-- 网站图标滚动容器 -->
+        <!-- Site Icon Scroll Container -->
         <HorizontalScrollView
             android:id="@+id/siteScroll"
             android:layout_width="0dp"
@@ -61,7 +62,7 @@
 
         </HorizontalScrollView>
 
-        <!-- 添加按钮 -->
+        <!-- Add Button -->
         <ImageButton
             android:id="@+id/addButton"
             android:layout_width="48dp"
@@ -75,7 +76,7 @@
 
     </LinearLayout>
 
-    <!-- 网站内容区域 - WebView -->
+    <!-- Site Content Area - WebView -->
     <WebView
         android:id="@+id/mainWebView"
         android:layout_width="match_parent"

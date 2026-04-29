@@ -5,46 +5,46 @@
     <string name="package_name">cn.trae.mtc</string>
     <string name="custom_url_scheme">cn.trae.mtc</string>
     
-    <string name="select_language">言語を選択</string>
-    <string name="action">操作</string>
-    <string name="edit">編集</string>
-    <string name="delete">削除</string>
+    <string name="select_language">Gengo o Sentaku</string>
+    <string name="action">Sosa</string>
+    <string name="edit">Henshu</string>
+    <string name="delete">Sakujo</string>
     
-    <string name="add_site">サイトを追加</string>
-    <string name="edit_site">サイトを編集</string>
-    <string name="site_name">サイト名</string>
-    <string name="site_url">URL（https://...）</string>
-    <string name="site_short_name">略称（1-4文字）</string>
-    <string name="site_short_name_hint">例：D または 豆</string>
-    <string name="allow_wrap">折り返しを許可</string>
+    <string name="add_site">Saito o Tsuika</string>
+    <string name="edit_site">Saito o Henshu</string>
+    <string name="site_name">Saito-mei</string>
+    <string name="site_url">URL (https://...)</string>
+    <string name="site_short_name">Ryakusho (1-4 moji)</string>
+    <string name="site_short_name_hint">rei: D matawa Dou</string>
+    <string name="allow_wrap">Orikaeshi o Kyoka</string>
     
-    <string name="save">保存</string>
-    <string name="cancel">キャンセル</string>
-    <string name="saved">保存しました</string>
+    <string name="save">Hozon</string>
+    <string name="cancel">Kyanseru</string>
+    <string name="saved">Hozon Shimashita</string>
     
-    <string name="save_success">自動保存成功</string>
-    <string name="save_failed">保存失敗</string>
+    <string name="save_success">Jido Hozon Seiko</string>
+    <string name="save_failed">Hozon Shippai</string>
     
-    <string name="permission_title">ファイル保存許可が必要</string>
-    <string name="permission_message">ファイル保存を許可しますか？</string>
-    <string name="always_remind">毎回確認する</string>
-    <string name="allow">許可</string>
-    <string name="deny">拒否</string>
+    <string name="permission_title">Fairu Hozon Kyoka ga Hitsuyo</string>
+    <string name="permission_message">Fairu Hozon o Kyoka Shimasu Ka?</string>
+    <string name="always_remind">Maikaku Kakunin Suru</string>
+    <string name="allow">Kyoka</string>
+    <string name="deny">Kyohi</string>
     
-    <string name="duplicate_title">重複コンテンツを検出</string>
-    <string name="duplicate_message">このコンテンツは既に保存されています：\n%s\n\n保存しますか？</string>
+    <string name="duplicate_title">Chofuku Kontentsu o Kenshutsu</string>
+    <string name="duplicate_message">Kono Kontentsu wa Sude ni Hozon Sareteimasu:\n%s\n\nHozon Shimasu Ka?</string>
     
-    <string name="auto_save_success">自動保存成功</string>
-    <string name="seconds_close">%d秒後に閉じます</string>
+    <string name="auto_save_success">Jido Hozon Seiko</string>
+    <string name="seconds_close">%d Byogo ni Tojimasu</string>
     
     <string name="language_en">EN</string>
-    <string name="language_zh">中文</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_ko">한국어</string>
-    <string name="language_es">Español</string>
-    <string name="language_fr">Français</string>
-    <string name="language_de">Deutsch</string>
-    <string name="language_pt">Português</string>
-    <string name="language_ru">Русский</string>
-    <string name="language_ar">العربية</string>
+    <string name="language_zh">ZH</string>
+    <string name="language_ja">JA</string>
+    <string name="language_ko">KO</string>
+    <string name="language_es">ES</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">DE</string>
+    <string name="language_pt">PT</string>
+    <string name="language_ru">RU</string>
+    <string name="language_ar">AR</string>
 </resources>
