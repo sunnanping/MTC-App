@@ -230,11 +230,11 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
 
     private List<Site> getDefaultSites() {
         List<Site> defaultSites = new ArrayList<>();
-        defaultSites.add(new Site("TRAE SOLO", "https://solo.trae.cn", "T", "#5C61FF"));
-        defaultSites.add(new Site("DeepSeek", "https://chat.deepseek.com", "D", "#00D4AA"));
-        defaultSites.add(new Site("Doubao", "https://www.doubao.com/chat", "D", "#1890FF"));
-        defaultSites.add(new Site("Kimi", "https://www.kimi.com", "K", "#FF6B6B"));
-        defaultSites.add(new Site("NotebookLM", "https://notebooklm.google.com", "N", "#4285F4"));
+        defaultSites.add(new Site("TRAE SOLO", "https://solo.trae.cn", "TRAE\nSOLO", "#5C61FF", true));
+        defaultSites.add(new Site("DeepSeek", "https://chat.deepseek.com/sign_in", "Deep\nSeek", "#00D4AA", true));
+        defaultSites.add(new Site("豆包", "https://www.doubao.com/chat", "豆包", "#1890FF", false));
+        defaultSites.add(new Site("Kimi", "https://www.kimi.com", "K", "#FF6B6B", false));
+        defaultSites.add(new Site("NotebookLM", "https://notebooklm.google.com", "Note\nBook", "#4285F4", true));
         return defaultSites;
     }
 
@@ -318,11 +318,8 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         
         if (isActive) {
             textView.setBackgroundTintList(ColorStateList.valueOf(color));
-            textView.setAlpha(1.0f);
         } else {
-            int darkColor = darkenColor(color, 0.5f);
-            textView.setBackgroundTintList(ColorStateList.valueOf(darkColor));
-            textView.setAlpha(1.0f);
+            textView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CCCCCC")));
         }
         
         textView.setOnClickListener(v -> selectSite(site));
@@ -465,7 +462,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         
         EditText iconInput = new EditText(this);
         iconInput.setHint(getString(R.string.site_short_name_hint));
-        iconInput.setFilters(new android.text.InputFilter[]{new android.text.InputFilter.LengthFilter(4)});
         if (editSite != null) iconInput.setText(editSite.icon);
         layout.addView(iconInput);
         
