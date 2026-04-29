@@ -4,14 +4,14 @@ import android.app.AlertDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.CookieManager;
@@ -22,13 +22,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import androidx.core.content.ContextCompat;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -82,7 +77,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         currentLanguage = prefs.getString(KEY_LANG, "EN");
         
-        // 加载保存的网站
         String sitesJson = prefs.getString(KEY_SITES, null);
         if (sitesJson != null) {
             try {
@@ -94,7 +88,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             sites = getDefaultSites();
         }
         
-        // 加载最近保存
         String savesJson = prefs.getString(KEY_SAVES, "[]");
         try {
             JSONArray array = new JSONArray(savesJson);
@@ -117,16 +110,12 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         languageSelector.setOnClickListener(v -> showLanguageDialog());
         addButton.setOnClickListener(v -> showAddSiteDialog());
 
-        // Edge-to-Edge 适配
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             webView.setOnApplyWindowInsetsListener((v, insets) -> {
-                WindowInsets safeInsets = insets.getInsets(WindowInsets.Type.systemBars());
+                Insets safeInsets = insets.getInsets(WindowInsets.Type.systemBars());
                 int topInset = safeInsets.top;
                 int bottomInset = safeInsets.bottom;
-                
-                // 给 webView 添加上下内边距
                 v.setPadding(0, topInset, 0, bottomInset);
-                
                 return insets;
             });
         }
@@ -135,7 +124,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private void initWebView() {
         WebSettings settings = webView.getSettings();
         
-        // 基本设置
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
         settings.setDatabaseEnabled(true);
@@ -144,23 +132,18 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
         
-        // 修改 User-Agent 模拟浏览器
-        String originalUA = settings.getUserAgentString();
         String customUA = "Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + 
             "; " + Build.MODEL + ") AppleWebKit/537.36 (KHTML, like Gecko) " +
             "Chrome/120.0.0.0 Mobile Safari/537.36";
         settings.setUserAgentString(customUA);
         
-        // Cookie 支持
         CookieManager.getInstance().setAcceptCookie(true);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
         
-        // 混合内容
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         }
         
-        // WebViewClient 和 WebChromeClient
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
@@ -266,34 +249,22 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         textView.setTextSize(18);
         textView.setTypeface(null, android.graphics.Typeface.BOLD);
         
-        // 设置背景颜色
+        textView.setBackgroundResource(R.drawable.circle_bg);
+        
         try {
-            textView.setBackgroundColor(Color.parseColor(site.color));
+            int color = Color.parseColor(site.color);
+            textView.setBackgroundTintList(ColorStateList.valueOf(color));
         } catch (Exception e) {
-            textView.setBackgroundColor(Color.parseColor("#5C61FF"));
+            textView.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#5C61FF")));
         }
         
-        // 设置圆形背景
-        textView.setBackgroundResource(R.drawable.circle_bg);
-        // 动态修改颜色
-        textView.setBackgroundTintList(
-            androidx.core.content.res.ColorStateList.valueOf(Color.parseColor(site.color))
-        );
-        
-        // 激活状态样式
         if (activeSite != null && activeSite.url.equals(site.url)) {
             textView.setScaleX(1.1f);
             textView.setScaleY(1.1f);
-            textView.setBackgroundTintList(
-                androidx.core.content.res.ColorStateList.valueOf(Color.parseColor(site.color))
-            );
-            // 添加白色边框
-            textView.setStrokeWidth(2);
         }
         
         textView.setOnClickListener(v -> selectSite(site));
         
-        // 长按编辑/删除
         textView.setOnLongClickListener(v -> {
             showEditDeleteDialog(site);
             return true;
@@ -352,7 +323,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         
         EditText urlInput = new EditText(this);
         urlInput.setHint("网址（https://...）");
-        urlInput.setInputType(EditorInfo.TYPE_TEXT_VARIATION_WEB_EMAIL);
+        urlInput.setInputType(EditorInfo.TYPE_TEXT_VARIATION_URI);
         if (editSite != null) urlInput.setText(editSite.url);
         
         layout.addView(nameInput);
@@ -402,7 +373,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private String getIconFromName(String name) {
         if (name == null || name.isEmpty()) return "?";
         
-        // 检查是否有中文字符
         for (char c : name.toCharArray()) {
             if (c >= '\u4e00' && c <= '\u9fff') {
                 return String.valueOf(c);
@@ -417,20 +387,16 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             return;
         }
         
-        // 生成文件名
         String filename = generateFilename(activeSite.name);
         
-        // 下载文件
         downloadMarkdown(filename, content);
         
-        // 记录到最近保存
         recentSaves.add(0, filename);
         if (recentSaves.size() > 10) {
             recentSaves.remove(recentSaves.size() - 1);
         }
         saveRecentSaves();
         
-        // 显示通知
         showToastNotification(filename, true);
     }
 
@@ -438,7 +404,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmm", Locale.getDefault());
         String timeStr = sdf.format(new Date());
         
-        // 获取该网站的计数器
         int counter = siteCounters.getOrDefault(siteName + "-" + timeStr, 1);
         siteCounters.put(siteName + "-" + timeStr, counter + 1);
         
@@ -446,7 +411,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     }
 
     private void downloadMarkdown(String filename, String content) {
-        // 创建一个临时网页用于下载
         String html = "<html>" +
             "<head><title>Download</title></head>" +
             "<body>" +
@@ -460,9 +424,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     }
 
     private void showToastNotification(String filename, boolean success) {
-        // 创建一个简单的通知
         runOnUiThread(() -> {
-            // 显示 Toast
             android.widget.Toast.makeText(
                 this,
                 success ? "保存成功 / Saved: " + filename : "保存失败 / Save failed",
