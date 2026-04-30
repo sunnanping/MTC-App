@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import java.util.Locale;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private static final String KEY_ALWAYS_REMIND = "always_remind";
     private static final String KEY_ACTIVE_SITE_URL = "active_site_url";
     private static final String KEY_SCROLL_X = "site_scroll_x";
+    private static final String KEY_FIRST_LAUNCH = "first_launch";
     private static final int REQUEST_STORAGE_PERMISSION = 1001;
     private static final int MAX_MD5_CACHE = 100;
     private static final int MAX_RECENT_SAVES = 10;
@@ -87,7 +89,23 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         super.onCreate(savedInstanceState);
         
         prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        currentLanguage = prefs.getString(KEY_LANG, "EN");
+        
+        // Check if it's the first launch
+        boolean isFirstLaunch = prefs.getBoolean(KEY_FIRST_LAUNCH, true);
+        if (isFirstLaunch) {
+            // Use system language on first launch
+            Locale systemLocale = Locale.getDefault();
+            currentLanguage = getLanguageCodeFromSystemLocale(systemLocale);
+            // Save the language and mark that first launch is done
+            prefs.edit()
+                .putString(KEY_LANG, currentLanguage)
+                .putBoolean(KEY_FIRST_LAUNCH, false)
+                .apply();
+        } else {
+            // Use saved language
+            currentLanguage = prefs.getString(KEY_LANG, "EN");
+        }
+        
         setAppLocale(currentLanguage);
         
         setContentView(R.layout.activity_main);
@@ -227,6 +245,54 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
                 return "nl-NL";
             default:
                 return "en-US";
+        }
+    }
+
+    private String getLanguageCodeFromSystemLocale(Locale systemLocale) {
+        String language = systemLocale.getLanguage();
+        String country = systemLocale.getCountry();
+        
+        switch (language) {
+            case "zh":
+                return "ZH";
+            case "ja":
+                return "JA";
+            case "ko":
+                return "KO";
+            case "es":
+                return "ES";
+            case "fr":
+                return "FR";
+            case "de":
+                return "DE";
+            case "pt":
+                return "PT";
+            case "ru":
+                return "RU";
+            case "ar":
+                return "AR";
+            case "hi":
+                return "HI";
+            case "bn":
+                return "BN";
+            case "pa":
+                return "PA";
+            case "jv":
+                return "JV";
+            case "mr":
+                return "MR";
+            case "tr":
+                return "TR";
+            case "it":
+                return "IT";
+            case "pl":
+                return "PL";
+            case "uk":
+                return "UK";
+            case "nl":
+                return "NL";
+            default:
+                return "EN";
         }
     }
 
