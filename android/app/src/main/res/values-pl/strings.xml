@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Wybierz jezyk</string>
+    <string name="action">Akcja</string>
+    <string name="edit">Edytuj</string>
+    <string name="delete">Usun</string>
+    
+    <string name="add_site">Dodaj strone</string>
+    <string name="edit_site">Edytuj strone</string>
+    <string name="site_name">Nazwa strony</string>
+    <string name="site_url">URL strony</string>
+    <string name="site_short_name">Krotka nazwa</string>
+    <string name="site_short_name_hint">Przyklad: D</string>
+    <string name="allow_wrap">Zezwol na zlamanie linii</string>
+    
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
+    <string name="saved">Zapisano</string>
+    
+    <string name="save_success">Automatyczne zapisywanie udane</string>
+    <string name="save_failed">Zapisywanie nie udalo sie</string>
+    
+    <string name="permission_title">Wymagane uprawnienia do przechowywania</string>
+    <string name="permission_message">Zezwolic na zapisywanie plikow?</string>
+    <string name="always_remind">Zawsze przypominaj</string>
+    <string name="allow">Zezwol</string>
+    <string name="deny">Odmow</string>
+    
+    <string name="duplicate_title">Wykryto zduplikowana tresc</string>
+    <string name="duplicate_message">Ta tresc zostala juz zapisana</string>
+    
+    <string name="auto_save_success">Automatyczne zapisywanie udane</string>
+    <string name="seconds_close">Zamyka sie za %d sekund</string>
+    
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Punjabi</string>
+    <string name="language_jv">Javanese</string>
+    <string name="language_mr">Marathi</string>
+    <string name="language_tr">Turkish</string>
+    <string name="language_it">Italian</string>
+    <string name="language_pl">Polish</string>
+    <string name="language_uk">Ukrainian</string>
+    <string name="language_nl">Dutch</string>
+</resources>

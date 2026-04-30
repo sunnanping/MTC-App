@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Dil sec</string>
+    <string name="action">Eylem</string>
+    <string name="edit">Duzenle</string>
+    <string name="delete">Sil</string>
+    
+    <string name="add_site">Site ekle</string>
+    <string name="edit_site">Site duzenle</string>
+    <string name="site_name">Site adi</string>
+    <string name="site_url">Site URL</string>
+    <string name="site_short_name">Kisa isim</string>
+    <string name="site_short_name_hint">Ornek: D</string>
+    <string name="allow_wrap">Satir kaydirma izni</string>
+    
+    <string name="save">Kaydet</string>
+    <string name="cancel">Iptal</string>
+    <string name="saved">Kaydedildi</string>
+    
+    <string name="save_success">Otomatik kayit basarili</string>
+    <string name="save_failed">Kayit basarisiz</string>
+    
+    <string name="permission_title">Depolama izni gerekli</string>
+    <string name="permission_message">Dosya kaydetmeye izin ver?</string>
+    <string name="always_remind">Her zaman hatirlat</string>
+    <string name="allow">Izin ver</string>
+    <string name="deny">Reddet</string>
+    
+    <string name="duplicate_title">Cift icerik algilandi</string>
+    <string name="duplicate_message">Bu icerik zaten kaydedildi</string>
+    
+    <string name="auto_save_success">Otomatik kayit basarili</string>
+    <string name="seconds_close">%d saniye sonra kapanir</string>
+    
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Punjabi</string>
+    <string name="language_jv">Javanese</string>
+    <string name="language_mr">Marathi</string>
+    <string name="language_tr">Turkish</string>
+    <string name="language_it">Italian</string>
+    <string name="language_pl">Polish</string>
+    <string name="language_uk">Ukrainian</string>
+    <string name="language_nl">Dutch</string>
+</resources>

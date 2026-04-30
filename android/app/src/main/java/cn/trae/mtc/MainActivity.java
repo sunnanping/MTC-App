@@ -372,7 +372,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     }
 
     private void updateLanguageText() {
-        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR"};
+        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR", "HI", "BN", "PA", "JV", "MR", "TR", "IT", "PL", "UK", "NL"};
         String[] languages = {
             getString(R.string.language_en),
             getString(R.string.language_zh),
@@ -383,7 +383,17 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             getString(R.string.language_de),
             getString(R.string.language_pt),
             getString(R.string.language_ru),
-            getString(R.string.language_ar)
+            getString(R.string.language_ar),
+            getString(R.string.language_hi),
+            getString(R.string.language_bn),
+            getString(R.string.language_pa),
+            getString(R.string.language_jv),
+            getString(R.string.language_mr),
+            getString(R.string.language_tr),
+            getString(R.string.language_it),
+            getString(R.string.language_pl),
+            getString(R.string.language_uk),
+            getString(R.string.language_nl)
         };
         
         for (int i = 0; i < languageCodes.length; i++) {
@@ -405,10 +415,20 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             getString(R.string.language_de),
             getString(R.string.language_pt),
             getString(R.string.language_ru),
-            getString(R.string.language_ar)
+            getString(R.string.language_ar),
+            getString(R.string.language_hi),
+            getString(R.string.language_bn),
+            getString(R.string.language_pa),
+            getString(R.string.language_jv),
+            getString(R.string.language_mr),
+            getString(R.string.language_tr),
+            getString(R.string.language_it),
+            getString(R.string.language_pl),
+            getString(R.string.language_uk),
+            getString(R.string.language_nl)
         };
         
-        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR"};
+        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR", "HI", "BN", "PA", "JV", "MR", "TR", "IT", "PL", "UK", "NL"};
         
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.select_language))

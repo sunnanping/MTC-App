@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Bhasha chunaen</string>
+    <string name="action">Kriya</string>
+    <string name="edit">Sampad</string>
+    <string name="delete">Mita</string>
+    
+    <string name="add_site">Sait jodeen</string>
+    <string name="edit_site">Sait sampad</string>
+    <string name="site_name">Sait da nao</string>
+    <string name="site_url">Sait da URL</string>
+    <string name="site_short_name">Mota nao</string>
+    <string name="site_short_name_hint">Uparaadh: D</string>
+    <string name="allow_wrap">Lahir tukure da anumati</string>
+    
+    <string name="save">Rakh</string>
+    <string name="cancel">Radd</string>
+    <string name="saved">Rakha</string>
+    
+    <string name="save_success">Apat sangrah safal</string>
+    <string name="save_failed">Sangrah chuk</string>
+    
+    <string name="permission_title">Sangraheea anumati labh</string>
+    <string name="permission_message">Files sangraheea karne di?</string>
+    <string name="always_remind">Hamesha sodh</string>
+    <string name="allow">Anumati</string>
+    <string name="deny">Radd</string>
+    
+    <string name="duplicate_title">Dublik paida</string>
+    <string name="duplicate_message">Eh content agge sanrakshit</string>
+    
+    <string name="auto_save_success">Apat sangrah safal</string>
+    <string name="seconds_close">%d second vich band</string>
+    
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Punjabi</string>
+    <string name="language_jv">Javanese</string>
+    <string name="language_mr">Marathi</string>
+    <string name="language_tr">Turkish</string>
+    <string name="language_it">Italian</string>
+    <string name="language_pl">Polish</string>
+    <string name="language_uk">Ukrainian</string>
+    <string name="language_nl">Dutch</string>
+</resources>

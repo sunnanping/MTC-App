@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Bhasha nivel</string>
+    <string name="action">Kriya</string>
+    <string name="edit">Sthap</string>
+    <string name="delete">Kalah</string>
+    
+    <string name="add_site">Sait jod</string>
+    <string name="edit_site">Sait sthap</string>
+    <string name="site_name">Saitache naav</string>
+    <string name="site_url">Saitache URL</string>
+    <string name="site_short_name">Laghv naav</string>
+    <string name="site_short_name_hint">Nirdesh: D</string>
+    <string name="allow_wrap">Oonchlyaa lihinyachi anumati</string>
+    
+    <string name="save">Sanh</string>
+    <string name="cancel">Radd</string>
+    <string name="saved">Sanhlay</string>
+    
+    <string name="save_success">Svachchhand sanh safal</string>
+    <string name="save_failed">Sanh me tras</string>
+    
+    <string name="permission_title">Sanhane adhiktar avi</string>
+    <string name="permission_message">Files sanhnyachi anumati de?</string>
+    <string name="always_remind">Nitya smarana</string>
+    <string name="allow">Anumati</string>
+    <string name="deny">Aswadu</string>
+    
+    <string name="duplicate_title">Pratichya sheva</string>
+    <string name="duplicate_message">He sheva agoone sanhle</string>
+    
+    <string name="auto_save_success">Svachchhand sanh safal</string>
+    <string name="seconds_close">%d sekd madhe band</string>
+    
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Punjabi</string>
+    <string name="language_jv">Javanese</string>
+    <string name="language_mr">Marathi</string>
+    <string name="language_tr">Turkish</string>
+    <string name="language_it">Italian</string>
+    <string name="language_pl">Polish</string>
+    <string name="language_uk">Ukrainian</string>
+    <string name="language_nl">Dutch</string>
+</resources>

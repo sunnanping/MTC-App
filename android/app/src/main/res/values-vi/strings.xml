@@ -37,14 +37,24 @@
     <string name="auto_save_success">Tu dong luu thanh cong</string>
     <string name="seconds_close">Dong sau %d giay</string>
     
-    <string name="language_en">EN</string>
-    <string name="language_zh">中文</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_ko">KO</string>
-    <string name="language_es">ES</string>
-    <string name="language_fr">FR</string>
-    <string name="language_de">DE</string>
-    <string name="language_pt">PT</string>
-    <string name="language_ru">RU</string>
-    <string name="language_ar">AR</string>
+    <string name="language_en">Tieng Anh</string>
+    <string name="language_zh">Tieng Trung</string>
+    <string name="language_ja">Tieng Nhat</string>
+    <string name="language_ko">Tieng Han</string>
+    <string name="language_es">Tieng Tay Ban Nha</string>
+    <string name="language_fr">Tieng Phap</string>
+    <string name="language_de">Tieng Duc</string>
+    <string name="language_pt">Tieng Bồ Đào Nha</string>
+    <string name="language_ru">Tieng Nga</string>
+    <string name="language_ar">Tieng A Rap</string>
+    <string name="language_hi">Tieng Hin-đi</string>
+    <string name="language_bn">Tieng Bengali</string>
+    <string name="language_pa">Tieng Punjabi</string>
+    <string name="language_jv">Tieng Java</string>
+    <string name="language_mr">Tieng Marathi</string>
+    <string name="language_tr">Tieng Tho Nhi Ky</string>
+    <string name="language_it">Tieng Y</string>
+    <string name="language_pl">Tieng Ba Lan</string>
+    <string name="language_uk">Tieng Uc</string>
+    <string name="language_nl">Tieng Ha Lan</string>
 </resources>

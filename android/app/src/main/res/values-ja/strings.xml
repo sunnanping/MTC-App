@@ -37,7 +37,7 @@
     <string name="auto_save_success">自動保存成功</string>
     <string name="seconds_close">%d秒後に閉じます</string>
     
-    <string name="language_en">英语</string>
+    <string name="language_en">英語</string>
     <string name="language_zh">中国語</string>
     <string name="language_ja">日本語</string>
     <string name="language_ko">韓国語</string>
@@ -47,4 +47,14 @@
     <string name="language_pt">ポルトガル語</string>
     <string name="language_ru">ロシア語</string>
     <string name="language_ar">アラビア語</string>
+    <string name="language_hi">ヒンディー語</string>
+    <string name="language_bn">ベンガル語</string>
+    <string name="language_pa">パンジャーブ語</string>
+    <string name="language_jv">ジャワ語</string>
+    <string name="language_mr">マラーティー語</string>
+    <string name="language_tr">トルコ語</string>
+    <string name="language_it">イタリア語</string>
+    <string name="language_pl">ポーランド語</string>
+    <string name="language_uk">ウクライナ語</string>
+    <string name="language_nl">オランダ語</string>
 </resources>

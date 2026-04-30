@@ -37,14 +37,24 @@
     <string name="auto_save_success">Hifz automatie najaah</string>
     <string name="seconds_close">Ighlaq ba%d %d thaniya</string>
     
-    <string name="language_en">EN</string>
-    <string name="language_zh">中文</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_ko">KO</string>
-    <string name="language_es">ES</string>
-    <string name="language_fr">FR</string>
-    <string name="language_de">DE</string>
-    <string name="language_pt">PT</string>
-    <string name="language_ru">RU</string>
-    <string name="language_ar">Arabic</string>
+    <string name="language_en">Alanjali</string>
+    <string name="language_zh">Alssiny</string>
+    <string name="language_ja">Alnnppn</string>
+    <string name="language_ko">Alkurie</string>
+    <string name="language_es">Alaspniol</string>
+    <string name="language_fr">Alfransee</string>
+    <string name="language_de">Almnni</string>
+    <string name="language_pt">Alburtughali</string>
+    <string name="language_ru">Alrrwsy</string>
+    <string name="language_ar">Alarabia</string>
+    <string name="language_hi">Alhindi</string>
+    <string name="language_bn">Albnjali</string>
+    <string name="language_pa">Alpnjabia</string>
+    <string name="language_jv">Aljawa</string>
+    <string name="language_mr">Almrathia</string>
+    <string name="language_tr">Altrkia</string>
+    <string name="language_it">Alitalia</string>
+    <string name="language_pl">Alblnia</string>
+    <string name="language_uk">Alukrania</string>
+    <string name="language_nl">Alhlndia</string>
 </resources>

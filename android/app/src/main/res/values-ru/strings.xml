@@ -37,14 +37,24 @@
     <string name="auto_save_success">Avtomaticheski sokhraneno</string>
     <string name="seconds_close">Zakryit cherez %d sekund</string>
     
-    <string name="language_en">EN</string>
-    <string name="language_zh">中文</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_ko">KO</string>
-    <string name="language_es">ES</string>
-    <string name="language_fr">FR</string>
-    <string name="language_de">DE</string>
-    <string name="language_pt">PT</string>
-    <string name="language_ru">Русский</string>
-    <string name="language_ar">AR</string>
+    <string name="language_en">Anhliiskii</string>
+    <string name="language_zh">Kitaiskii</string>
+    <string name="language_ja">Iaponskii</string>
+    <string name="language_ko">Koreiskii</string>
+    <string name="language_es">Ispanskii</string>
+    <string name="language_fr">Frantsuzskii</string>
+    <string name="language_de">Nemetskii</string>
+    <string name="language_pt">Portugalskii</string>
+    <string name="language_ru">Russkii</string>
+    <string name="language_ar">Arabskii</string>
+    <string name="language_hi">Indiiskii</string>
+    <string name="language_bn">Bengalskiy</string>
+    <string name="language_pa">Pandzhabskii</string>
+    <string name="language_jv">Yavskii</string>
+    <string name="language_mr">Marathiskii</string>
+    <string name="language_tr">Turetskii</string>
+    <string name="language_it">Italianskii</string>
+    <string name="language_pl">Polskii</string>
+    <string name="language_uk">Ukrainskii</string>
+    <string name="language_nl">Gollandskii</string>
 </resources>

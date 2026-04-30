@@ -37,14 +37,24 @@
     <string name="auto_save_success">Enregistre automatiquement</string>
     <string name="seconds_close">Fermer dans %d secondes</string>
     
-    <string name="language_en">EN</string>
-    <string name="language_zh">中文</string>
-    <string name="language_ja">日本語</string>
-    <string name="language_ko">KO</string>
-    <string name="language_es">ES</string>
+    <string name="language_en">Anglais</string>
+    <string name="language_zh">Chinois</string>
+    <string name="language_ja">Japonais</string>
+    <string name="language_ko">Coréen</string>
+    <string name="language_es">Espagnol</string>
     <string name="language_fr">Français</string>
-    <string name="language_de">DE</string>
-    <string name="language_pt">PT</string>
-    <string name="language_ru">RU</string>
-    <string name="language_ar">AR</string>
+    <string name="language_de">Allemand</string>
+    <string name="language_pt">Portugais</string>
+    <string name="language_ru">Russe</string>
+    <string name="language_ar">Arabe</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Pendjabi</string>
+    <string name="language_jv">Javanais</string>
+    <string name="language_mr">Marathe</string>
+    <string name="language_tr">Turc</string>
+    <string name="language_it">Italien</string>
+    <string name="language_pl">Polonais</string>
+    <string name="language_uk">Ukrainien</string>
+    <string name="language_nl">Néerlandais</string>
 </resources>

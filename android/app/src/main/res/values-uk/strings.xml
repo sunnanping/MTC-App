@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Obraty movu</string>
+    <string name="action">Diallya</string>
+    <string name="edit">Redahuvaty</string>
+    <string name="delete">Vydalyty</string>
+    
+    <string name="add_site">Dodaty sait</string>
+    <string name="edit_site">Redahuvaty sait</string>
+    <string name="site_name">Imya saita</string>
+    <string name="site_url">URL saita</string>
+    <string name="site_short_name">Korotke imya</string>
+    <string name="site_short_name_hint">Pryklad: D</string>
+    <string name="allow_wrap">Dozvolyty perenos</string>
+    
+    <string name="save">Zberehty</string>
+    <string name="cancel">Skasuvaty</string>
+    <string name="saved">Zberezheno</string>
+    
+    <string name="save_success">Avtomatychne zberehennya uspishne</string>
+    <string name="save_failed">Pomylka zberehennya</string>
+    
+    <string name="permission_title">Potriben dozvil na zberihannya</string>
+    <string name="permission_message">Dozvolyty zberehaty faily?</string>
+    <string name="always_remind">Zavzhdy nahaduvaty</string>
+    <string name="allow">Dozvolyty</string>
+    <string name="deny">Vidmovyty</string>
+    
+    <string name="duplicate_title">Vyiavleno dublikat</string>
+    <string name="duplicate_message">Tse vmistuvannya uzhe zberezheno</string>
+    
+    <string name="auto_save_success">Avtomatychne zberehennya uspishne</string>
+    <string name="seconds_close">Zakryvaetysya cherez %d sekund</string>
+    
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Punjabi</string>
+    <string name="language_jv">Javanese</string>
+    <string name="language_mr">Marathi</string>
+    <string name="language_tr">Turkish</string>
+    <string name="language_it">Italian</string>
+    <string name="language_pl">Polish</string>
+    <string name="language_uk">Ukrainian</string>
+    <string name="language_nl">Dutch</string>
+</resources>

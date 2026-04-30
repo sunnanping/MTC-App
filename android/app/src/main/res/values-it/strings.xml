@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Scegli lingua</string>
+    <string name="action">Azione</string>
+    <string name="edit">Modifica</string>
+    <string name="delete">Elimina</string>
+    
+    <string name="add_site">Aggiungi sito</string>
+    <string name="edit_site">Modifica sito</string>
+    <string name="site_name">Nome del sito</string>
+    <string name="site_url">URL del sito</string>
+    <string name="site_short_name">Nome breve</string>
+    <string name="site_short_name_hint">Esempio: D</string>
+    <string name="allow_wrap">Consenti ritorno a capo</string>
+    
+    <string name="save">Salva</string>
+    <string name="cancel">Annulla</string>
+    <string name="saved">Salvato</string>
+    
+    <string name="save_success">Salvataggio automatico riuscito</string>
+    <string name="save_failed">Salvataggio non riuscito</string>
+    
+    <string name="permission_title">Permesso di archiviazione necessario</string>
+    <string name="permission_message">Consentire il salvataggio dei file?</string>
+    <string name="always_remind">Ricorda sempre</string>
+    <string name="allow">Consenti</string>
+    <string name="deny">Nega</string>
+    
+    <string name="duplicate_title">Contenuto duplicato rilevato</string>
+    <string name="duplicate_message">Questo contenuto e gia stato salvato</string>
+    
+    <string name="auto_save_success">Salvataggio automatico riuscito</string>
+    <string name="seconds_close">Chiude tra %d secondi</string>
+    
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Punjabi</string>
+    <string name="language_jv">Javanese</string>
+    <string name="language_mr">Marathi</string>
+    <string name="language_tr">Turkish</string>
+    <string name="language_it">Italian</string>
+    <string name="language_pl">Polish</string>
+    <string name="language_uk">Ukrainian</string>
+    <string name="language_nl">Dutch</string>
+</resources>

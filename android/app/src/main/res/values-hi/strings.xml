@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Bhasha chunen</string>
+    <string name="action">Kriya</string>
+    <string name="edit">Sandarth</string>
+    <string name="delete">Hataen</string>
+    
+    <string name="add_site">Stthapan jodeen</string>
+    <string name="edit_site">Stthapan sandarth</string>
+    <string name="site_name">Stthapan ka naam</string>
+    <string name="site_url">Stthapan ka URL</string>
+    <string name="site_short_name">Laghv naam</string>
+    <string name="site_short_name_hint">Udaharan: D</string>
+    <string name="allow_wrap">Pantarantaran ki anumati</string>
+    
+    <string name="save">Rakh</string>
+    <string name="cancel">Radd</string>
+    <string name="saved">Rakha gaya</string>
+    
+    <string name="save_success">Swayam se rakhana safal</string>
+    <string name="save_failed">Rakhane me viram</string>
+    
+    <string name="permission_title">Sanrakshan anumati aavashyak</string>
+    <string name="permission_message">Phail sanrakshit karne ki anumati de?</string>
+    <string name="always_remind">Hamesha sodh</string>
+    <string name="allow">Anumati</string>
+    <string name="deny">Inkar</string>
+    
+    <string name="duplicate_title">Dublik smadhan ka pata</string>
+    <string name="duplicate_message">Yah smadhan pehle se sanrakshit hai</string>
+    
+    <string name="auto_save_success">Swayam se rakhana safal</string>
+    <string name="seconds_close">%d sekand me band</string>
+    
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
+    <string name="language_hi">Hindi</string>
+    <string name="language_bn">Bengali</string>
+    <string name="language_pa">Punjabi</string>
+    <string name="language_jv">Javanese</string>
+    <string name="language_mr">Marathi</string>
+    <string name="language_tr">Turkish</string>
+    <string name="language_it">Italian</string>
+    <string name="language_pl">Polish</string>
+    <string name="language_uk">Ukrainian</string>
+    <string name="language_nl">Dutch</string>
+</resources>
