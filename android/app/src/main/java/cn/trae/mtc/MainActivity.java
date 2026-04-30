@@ -158,7 +158,37 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         webView = findViewById(R.id.mainWebView);
         addButton = findViewById(R.id.addButton);
 
-        updateLanguageText();
+        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR", "HI", "BN", "PA", "JV", "MR", "TR", "IT", "PL", "UK", "NL"};
+        String[] languages = {
+            getString(R.string.language_en),
+            getString(R.string.language_zh),
+            getString(R.string.language_ja),
+            getString(R.string.language_ko),
+            getString(R.string.language_es),
+            getString(R.string.language_fr),
+            getString(R.string.language_de),
+            getString(R.string.language_pt),
+            getString(R.string.language_ru),
+            getString(R.string.language_ar),
+            getString(R.string.language_hi),
+            getString(R.string.language_bn),
+            getString(R.string.language_pa),
+            getString(R.string.language_jv),
+            getString(R.string.language_mr),
+            getString(R.string.language_tr),
+            getString(R.string.language_it),
+            getString(R.string.language_pl),
+            getString(R.string.language_uk),
+            getString(R.string.language_nl)
+        };
+        
+        for (int i = 0; i < languageCodes.length; i++) {
+            if (languageCodes[i].equals(currentLanguage)) {
+                languageText.setText(languages[i]);
+                break;
+            }
+        }
+        
         languageSelector.setOnClickListener(v -> showLanguageDialog());
         addButton.setOnClickListener(v -> showAddSiteDialog());
 
@@ -215,15 +245,14 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private void initClipboard() {
         clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         clipboardManager.addPrimaryClipChangedListener(() -> {
-            if (activeSite != null && clipboardManager.hasPrimaryClip()) {
-                try {
-                    CharSequence text = clipboardManager.getPrimaryClip().getItemAt(0).getText();
-                    if (text != null && text.length() > 0) {
-                        handleAutoSave(text.toString());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+            if (activeSite != null && clipboardManager.hasPrimaryClip()) {try {
+                CharSequence text = clipboardManager.getPrimaryClip().getItemAt(0).getText();
+                if (text != null && text.length() > 0) {
+                    handleAutoSave(text.toString());
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             }
         });
     }
@@ -371,39 +400,15 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         webView.loadUrl(site.url);
     }
 
-    private void updateLanguageText() {
-        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR", "HI", "BN", "PA", "JV", "MR", "TR", "IT", "PL", "UK", "NL"};
-        String[] languages = {
-            getString(R.string.language_en),
-            getString(R.string.language_zh),
-            getString(R.string.language_ja),
-            getString(R.string.language_ko),
-            getString(R.string.language_es),
-            getString(R.string.language_fr),
-            getString(R.string.language_de),
-            getString(R.string.language_pt),
-            getString(R.string.language_ru),
-            getString(R.string.language_ar),
-            getString(R.string.language_hi),
-            getString(R.string.language_bn),
-            getString(R.string.language_pa),
-            getString(R.string.language_jv),
-            getString(R.string.language_mr),
-            getString(R.string.language_tr),
-            getString(R.string.language_it),
-            getString(R.string.language_pl),
-            getString(R.string.language_uk),
-            getString(R.string.language_nl)
-        };
+    private void changeLanguage(String languageCode) {
+        currentLanguage = languageCode;
+        prefs.edit().putString(KEY_LANG, currentLanguage).apply();
         
-        for (int i = 0; i < languageCodes.length; i++) {
-            if (languageCodes[i].equals(currentLanguage)) {
-                languageText.setText(languages[i]);
-                break;
-            }
-        }
+        finish();
+        startActivity(getIntent().addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
+        overridePendingTransition(0, 0);
     }
-    
+
     private void showLanguageDialog() {
         String[] languages = {
             getString(R.string.language_en),
@@ -433,31 +438,9 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.select_language))
             .setItems(languages, (dialog, which) -> {
-                currentLanguage = languageCodes[which];
-                languageText.setText(languages[which]);
-                prefs.edit().putString(KEY_LANG, currentLanguage).apply();
-                
-                injectLanguageToWebView(currentLanguage);
+                changeLanguage(languageCodes[which]);
             })
             .show();
-    }
-
-    private void injectLanguageToWebView(String language) {
-        if (webView != null) {
-            String js = String.format(
-                "if(window.MTCApp && window.MTCApp.onLanguageChange) {" +
-                "  window.MTCApp.onLanguageChange('%s');" +
-                "} else {" +
-                "  window.mtcLanguage = '%s';" +
-                "}",
-                language, language
-            );
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                webView.evaluateJavascript(js, null);
-            } else {
-                webView.loadUrl("javascript:" + js);
-            }
-        }
     }
 
     private void showAddSiteDialog() {
