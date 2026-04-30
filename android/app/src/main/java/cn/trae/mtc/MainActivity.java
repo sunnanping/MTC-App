@@ -59,6 +59,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private static final String KEY_PERMISSION = "file_permission";
     private static final String KEY_ALWAYS_REMIND = "always_remind";
     private static final String KEY_ACTIVE_SITE_URL = "active_site_url";
+    private static final String KEY_SCROLL_X = "site_scroll_x";
     private static final int REQUEST_STORAGE_PERMISSION = 1001;
     private static final int MAX_MD5_CACHE = 100;
     private static final int MAX_RECENT_SAVES = 10;
@@ -74,6 +75,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
 
     private LinearLayout languageSelector;
     private TextView languageText;
+    private android.widget.HorizontalScrollView siteScroll;
     private LinearLayout siteContainer;
     private android.webkit.WebView webView;
     private ClipboardManager clipboardManager;
@@ -102,12 +104,20 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             Site savedSite = findSiteByUrl(activeSiteUrl);
             if (savedSite != null) {
                 selectSite(savedSite);
+                restoreScrollPosition();
                 return;
             }
         }
         
         if (!sites.isEmpty()) {
             selectSite(sites.get(0));
+        }
+    }
+
+    private void restoreScrollPosition() {
+        if (siteScroll != null) {
+            int scrollX = prefs.getInt(KEY_SCROLL_X, 0);
+            siteScroll.post(() -> siteScroll.scrollTo(scrollX, 0));
         }
     }
 
@@ -274,6 +284,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private void initViews() {
         languageSelector = findViewById(R.id.languageSelector);
         languageText = findViewById(R.id.languageText);
+        siteScroll = findViewById(R.id.siteScroll);
         siteContainer = findViewById(R.id.siteContainer);
         webView = findViewById(R.id.mainWebView);
         addButton = findViewById(R.id.addButton);
@@ -527,6 +538,10 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         currentLanguage = languageCode;
         prefs.edit().putString(KEY_LANG, currentLanguage).apply();
         
+        if (siteScroll != null) {
+            prefs.edit().putInt(KEY_SCROLL_X, siteScroll.getScrollX()).apply();
+        }
+        
         finish();
         startActivity(getIntent().addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION));
         overridePendingTransition(0, 0);
@@ -558,42 +573,51 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         
         final String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR", "HI", "BN", "PA", "JV", "MR", "TR", "IT", "PL", "UK", "NL"};
         
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.select_language));
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.LanguageDialogStyle);
         
-        ListView listView = new ListView(this);
-        listView.setDividerHeight(0);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_language, null);
         
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_list_item, languages) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = (TextView) view;
-                
-                if (languageCodes[position].equals(currentLanguage)) {
-                    textView.setBackgroundColor(Color.parseColor("#F0F0F0"));
-                    textView.setTextColor(Color.parseColor("#888888"));
-                    textView.setEnabled(false);
-                } else {
-                    textView.setBackgroundColor(Color.TRANSPARENT);
-                    textView.setTextColor(Color.BLACK);
-                    textView.setEnabled(true);
-                }
-                
-                return view;
+        LinearLayout languageList = dialogView.findViewById(R.id.languageList);
+        android.widget.ImageButton closeButton = dialogView.findViewById(R.id.closeButton);
+        
+        for (int i = 0; i < languages.length; i++) {
+            final int position = i;
+            TextView languageItem = new TextView(this);
+            languageItem.setText(languages[i]);
+            languageItem.setPadding(dpToPx(16), dpToPx(14), dpToPx(16), dpToPx(14));
+            languageItem.setTextSize(16);
+            
+            if (languageCodes[i].equals(currentLanguage)) {
+                languageItem.setBackgroundColor(Color.parseColor("#F5F5F5"));
+                languageItem.setTextColor(Color.parseColor("#9E9E9E"));
+                languageItem.setEnabled(false);
+            } else {
+                languageItem.setBackgroundColor(Color.TRANSPARENT);
+                languageItem.setTextColor(Color.parseColor("#333333"));
+                languageItem.setOnClickListener(v -> {
+                    changeLanguage(languageCodes[position]);
+                });
+                languageItem.setBackgroundResource(R.drawable.list_item_selector);
             }
-        };
+            
+            languageList.addView(languageItem);
+        }
         
-        listView.setAdapter(adapter);
+        final AlertDialog dialog = builder.create();
+        dialog.setView(dialogView);
         
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            if (!languageCodes[position].equals(currentLanguage)) {
-                changeLanguage(languageCodes[position]);
-            }
-        });
+        closeButton.setOnClickListener(v -> dialog.dismiss());
         
-        builder.setView(listView);
-        builder.show();
+        dialog.show();
+        
+        android.view.Window window = dialog.getWindow();
+        if (window != null) {
+            android.view.WindowManager.LayoutParams lp = window.getAttributes();
+            lp.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.66);
+            lp.gravity = Gravity.CENTER;
+            window.setAttributes(lp);
+            window.setBackgroundDrawableResource(R.drawable.dialog_rounded_bg);
+        }
     }
 
     private void showAddSiteDialog() {
