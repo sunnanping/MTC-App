@@ -14,9 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:borderWidth="1dp"
-        android:borderColor="#E0E0E0"
-        android:background="#FAFAFA">
+        android:background="@drawable/dialog_header_border">
 
         <TextView
             android:layout_width="0dp"
@@ -33,7 +31,7 @@
             android:layout_height="32dp"
             android:src="@drawable/ic_close"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/close"/>
+            android:contentDescription=""/>
 
     </LinearLayout>
 
