@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Chon ngon ngu</string>
+    <string name="action">Hanh dong</string>
+    <string name="edit">Chinh sua</string>
+    <string name="delete">Xoa</string>
+    
+    <string name="add_site">Them trang web</string>
+    <string name="edit_site">Chinh sua trang web</string>
+    <string name="site_name">Ten trang web</string>
+    <string name="site_url">URL trang web</string>
+    <string name="site_short_name">Ten rut gon</string>
+    <string name="site_short_name_hint">VD: D</string>
+    <string name="allow_wrap">Cho phep xuong dong</string>
+    
+    <string name="save">Luu</string>
+    <string name="cancel">Huy</string>
+    <string name="saved">Da luu</string>
+    
+    <string name="save_success">Tu dong luu thanh cong</string>
+    <string name="save_failed">Luu that bai</string>
+    
+    <string name="permission_title">Can quyen luu tru</string>
+    <string name="permission_message">Cho phep luu tep tin?</string>
+    <string name="always_remind">Luon nho</string>
+    <string name="allow">Cho phep</string>
+    <string name="deny">Tu choi</string>
+    
+    <string name="duplicate_title">Phat hien noi dung trung lap</string>
+    <string name="duplicate_message">Noi dung nay da duoc luu</string>
+    
+    <string name="auto_save_success">Tu dong luu thanh cong</string>
+    <string name="seconds_close">Dong sau %d giay</string>
+    
+    <string name="language_en">EN</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">KO</string>
+    <string name="language_es">ES</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">DE</string>
+    <string name="language_pt">PT</string>
+    <string name="language_ru">RU</string>
+    <string name="language_ar">AR</string>
+</resources>

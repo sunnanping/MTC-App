@@ -158,7 +158,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         webView = findViewById(R.id.mainWebView);
         addButton = findViewById(R.id.addButton);
 
-        languageText.setText(currentLanguage);
+        updateLanguageText();
         languageSelector.setOnClickListener(v -> showLanguageDialog());
         addButton.setOnClickListener(v -> showAddSiteDialog());
 
@@ -371,6 +371,29 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         webView.loadUrl(site.url);
     }
 
+    private void updateLanguageText() {
+        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR"};
+        String[] languages = {
+            getString(R.string.language_en),
+            getString(R.string.language_zh),
+            getString(R.string.language_ja),
+            getString(R.string.language_ko),
+            getString(R.string.language_es),
+            getString(R.string.language_fr),
+            getString(R.string.language_de),
+            getString(R.string.language_pt),
+            getString(R.string.language_ru),
+            getString(R.string.language_ar)
+        };
+        
+        for (int i = 0; i < languageCodes.length; i++) {
+            if (languageCodes[i].equals(currentLanguage)) {
+                languageText.setText(languages[i]);
+                break;
+            }
+        }
+    }
+    
     private void showLanguageDialog() {
         String[] languages = {
             getString(R.string.language_en),
@@ -385,13 +408,13 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             getString(R.string.language_ar)
         };
         
-        String[] languageCodes = {"EN", "中文", "日本語", "한국어", "Español", "Français", "Deutsch", "Português", "Русский", "العربية"};
+        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR"};
         
         new AlertDialog.Builder(this)
             .setTitle(getString(R.string.select_language))
             .setItems(languages, (dialog, which) -> {
                 currentLanguage = languageCodes[which];
-                languageText.setText(currentLanguage);
+                languageText.setText(languages[which]);
                 prefs.edit().putString(KEY_LANG, currentLanguage).apply();
                 
                 injectLanguageToWebView(currentLanguage);

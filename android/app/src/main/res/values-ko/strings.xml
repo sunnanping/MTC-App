@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Eoneo-eul seontaekhaeyo</string>
+    <string name="action">Jungcha</string>
+    <string name="edit">Eoditeu</string>
+    <string name="delete">Sagje</string>
+    
+    <string name="add_site">Sait-eul chuchanghaeyo</string>
+    <string name="edit_site">Sait-eul editeuhaeyo</string>
+    <string name="site_name">Sait ileum</string>
+    <string name="site_url">Sait URL</string>
+    <string name="site_short_name">Sait danmyeong</string>
+    <string name="site_short_name_hint">Daeche: D</string>
+    <string name="allow_wrap">Saegeoneul heoroham</string>
+    
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="saved">Saved</string>
+    
+    <string name="save_success">Jadong sawa seonggong</string>
+    <string name="save_failed">Sawa silpae</string>
+    
+    <string name="permission_title">Pile sowa gwoneuri piryohamnida</string>
+    <string name="permission_message">Pile-eul sawa hal su issge heorohasigessnaeyo?</string>
+    <string name="always_remind">Hangsaeng sangsighaseyo</string>
+    <string name="allow">Heoroham</string>
+    <string name="deny">Geujeongham</string>
+    
+    <string name="duplicate_title">Jungbok naeyong-eul geomchuhayeossumnida</string>
+    <string name="duplicate_message">I naeyong-eun ileohge sawa doeeoissseumnida</string>
+    
+    <string name="auto_save_success">Jadong sawa seonggong</string>
+    <string name="seconds_close">%d hu-e jageun gamnida</string>
+    
+    <string name="language_en">EN</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">한국어</string>
+    <string name="language_es">ES</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">DE</string>
+    <string name="language_pt">PT</string>
+    <string name="language_ru">RU</string>
+    <string name="language_ar">AR</string>
+</resources>

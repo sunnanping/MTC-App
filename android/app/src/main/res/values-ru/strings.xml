@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Vyberite yazyk</string>
+    <string name="action">Deystvie</string>
+    <string name="edit">Redaktirovat</string>
+    <string name="delete">Udalit</string>
+    
+    <string name="add_site">Dobavit sait</string>
+    <string name="edit_site">Redaktirovat sait</string>
+    <string name="site_name">Imya saita</string>
+    <string name="site_url">URL saita</string>
+    <string name="site_short_name">Kratkoe imya</string>
+    <string name="site_short_name_hint">Primer: D</string>
+    <string name="allow_wrap">Razreshit perenos</string>
+    
+    <string name="save">Sokhranit</string>
+    <string name="cancel">Otmena</string>
+    <string name="saved">Sokhraneno</string>
+    
+    <string name="save_success">Avtomaticheski sokhraneno</string>
+    <string name="save_failed">Oshibka sokhraneniya</string>
+    
+    <string name="permission_title">Nuzhno razreshenie na hranenie</string>
+    <string name="permission_message">Razreshit sokhranat fayly?</string>
+    <string name="always_remind">Vsegda napominat</string>
+    <string name="allow">Razreshit</string>
+    <string name="deny">Otkazat</string>
+    
+    <string name="duplicate_title">Obnaruzhen dublikat</string>
+    <string name="duplicate_message">Eto soderzhimye uzhe sokhraneno</string>
+    
+    <string name="auto_save_success">Avtomaticheski sokhraneno</string>
+    <string name="seconds_close">Zakryit cherez %d sekund</string>
+    
+    <string name="language_en">EN</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">KO</string>
+    <string name="language_es">ES</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">DE</string>
+    <string name="language_pt">PT</string>
+    <string name="language_ru">Русский</string>
+    <string name="language_ar">AR</string>
+</resources>

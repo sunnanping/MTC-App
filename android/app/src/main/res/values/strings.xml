@@ -37,14 +37,14 @@
     <string name="auto_save_success">Auto Save Success</string>
     <string name="seconds_close">%d seconds to close</string>
     
-    <string name="language_en">EN</string>
-    <string name="language_zh">ZH</string>
-    <string name="language_ja">JA</string>
-    <string name="language_ko">KO</string>
-    <string name="language_es">ES</string>
-    <string name="language_fr">FR</string>
-    <string name="language_de">DE</string>
-    <string name="language_pt">PT</string>
-    <string name="language_ru">RU</string>
-    <string name="language_ar">AR</string>
+    <string name="language_en">English</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">Korean</string>
+    <string name="language_es">Spanish</string>
+    <string name="language_fr">French</string>
+    <string name="language_de">German</string>
+    <string name="language_pt">Portuguese</string>
+    <string name="language_ru">Russian</string>
+    <string name="language_ar">Arabic</string>
 </resources>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Sprache waehlen</string>
+    <string name="action">Aktion</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="delete">Loeschen</string>
+    
+    <string name="add_site">Site hinzufuegen</string>
+    <string name="edit_site">Site bearbeiten</string>
+    <string name="site_name">Site-Name</string>
+    <string name="site_url">Site-URL</string>
+    <string name="site_short_name">Kurzname</string>
+    <string name="site_short_name_hint">Bsp: D</string>
+    <string name="allow_wrap">Zeilenumbruch erlauben</string>
+    
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="saved">Gespeichert</string>
+    
+    <string name="save_success">Automatisch gespeichert</string>
+    <string name="save_failed">Speichern fehlgeschlagen</string>
+    
+    <string name="permission_title">Speicherberechtigung erforderlich</string>
+    <string name="permission_message">Dateien speichern erlauben?</string>
+    <string name="always_remind">Immer erinnern</string>
+    <string name="allow">Erlauben</string>
+    <string name="deny">Verweigern</string>
+    
+    <string name="duplicate_title">Doppelter Inhalt erkannt</string>
+    <string name="duplicate_message">Dieser Inhalt wurde bereits gespeichert</string>
+    
+    <string name="auto_save_success">Automatisch gespeichert</string>
+    <string name="seconds_close">In %d Sekunden schliessen</string>
+    
+    <string name="language_en">EN</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">KO</string>
+    <string name="language_es">ES</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">Deutsch</string>
+    <string name="language_pt">PT</string>
+    <string name="language_ru">RU</string>
+    <string name="language_ar">AR</string>
+</resources>

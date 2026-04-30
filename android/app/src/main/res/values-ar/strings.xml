@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MTC App</string>
+    <string name="title_activity_main">MTC App</string>
+    <string name="package_name">cn.trae.mtc</string>
+    <string name="custom_url_scheme">cn.trae.mtc</string>
+    
+    <string name="select_language">Akhtar al-lughah</string>
+    <string name="action">Eamal</string>
+    <string name="edit">Tahreer</string>
+    <string name="delete">Hathf</string>
+    
+    <string name="add_site">Idafat makan</string>
+    <string name="edit_site">Tahreer al-makan</string>
+    <string name="site_name">Ism al-makan</string>
+    <string name="site_url">URL al-makan</string>
+    <string name="site_short_name">Ism mukhtasar</string>
+    <string name="site_short_name_hint">Mithal: D</string>
+    <string name="allow_wrap">Samaah altasarruf</string>
+    
+    <string name="save">Hifz</string>
+    <string name="cancel">Ighlaq</string>
+    <string name="saved">Mahfuz</string>
+    
+    <string name="save_success">Hifz automatie najaah</string>
+    <string name="save_failed">Fashl fi al-hifz</string>
+    
+    <string name="permission_title">Ihtiyaj ila ikhtiyar al-takhzeen</string>
+    <string name="permission_message">Samaah hifz al-malafat?</string>
+    <string name="always_remind">Daiman tadhakkar</string>
+    <string name="allow">Samaah</string>
+    <string name="deny">Rafd</string>
+    
+    <string name="duplicate_title">Kashf al-muhtawi al-mutakarrir</string>
+    <string name="duplicate_message">Hadha al-muhtawi qad hufith</string>
+    
+    <string name="auto_save_success">Hifz automatie najaah</string>
+    <string name="seconds_close">Ighlaq ba%d %d thaniya</string>
+    
+    <string name="language_en">EN</string>
+    <string name="language_zh">中文</string>
+    <string name="language_ja">日本語</string>
+    <string name="language_ko">KO</string>
+    <string name="language_es">ES</string>
+    <string name="language_fr">FR</string>
+    <string name="language_de">DE</string>
+    <string name="language_pt">PT</string>
+    <string name="language_ru">RU</string>
+    <string name="language_ar">Arabic</string>
+</resources>
