@@ -614,9 +614,38 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         if (window != null) {
             android.view.WindowManager.LayoutParams lp = window.getAttributes();
             lp.width = (int) (getResources().getDisplayMetrics().widthPixels * 0.66);
+            lp.height = (int) (getResources().getDisplayMetrics().heightPixels * 0.60);
             lp.gravity = Gravity.CENTER;
             window.setAttributes(lp);
             window.setBackgroundDrawableResource(R.drawable.dialog_rounded_bg);
+            
+            // Make dialog draggable
+            dialogView.setOnTouchListener(new View.OnTouchListener() {
+                private float initialX, initialY;
+                private float initialTouchX, initialTouchY;
+                
+                @Override
+                public boolean onTouch(View v, android.view.MotionEvent event) {
+                    switch (event.getAction()) {
+                        case android.view.MotionEvent.ACTION_DOWN:
+                            initialX = lp.x;
+                            initialY = lp.y;
+                            initialTouchX = event.getRawX();
+                            initialTouchY = event.getRawY();
+                            return true;
+                        case android.view.MotionEvent.ACTION_MOVE:
+                            float dx = event.getRawX() - initialTouchX;
+                            float dy = event.getRawY() - initialTouchY;
+                            lp.x = (int) (initialX + dx);
+                            lp.y = (int) (initialY + dy);
+                            window.setAttributes(lp);
+                            return true;
+                        case android.view.MotionEvent.ACTION_UP:
+                            return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
 
