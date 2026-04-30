@@ -18,18 +18,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.inputmethod.EditorInfo;
-import android.webkit.CookieManager;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -61,6 +58,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private static final String KEY_MD5_CACHE = "md5_cache";
     private static final String KEY_PERMISSION = "file_permission";
     private static final String KEY_ALWAYS_REMIND = "always_remind";
+    private static final String KEY_ACTIVE_SITE_URL = "active_site_url";
     private static final int REQUEST_STORAGE_PERMISSION = 1001;
     private static final int MAX_MD5_CACHE = 100;
     private static final int MAX_RECENT_SAVES = 10;
@@ -77,7 +75,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private LinearLayout languageSelector;
     private TextView languageText;
     private LinearLayout siteContainer;
-    private WebView webView;
+    private android.webkit.WebView webView;
     private ClipboardManager clipboardManager;
     private SharedPreferences prefs;
     private View addButton;
@@ -98,9 +96,28 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         initClipboard();
         initDefaultSites();
         renderSites();
+        
+        String activeSiteUrl = prefs.getString(KEY_ACTIVE_SITE_URL, null);
+        if (activeSiteUrl != null) {
+            Site savedSite = findSiteByUrl(activeSiteUrl);
+            if (savedSite != null) {
+                selectSite(savedSite);
+                return;
+            }
+        }
+        
         if (!sites.isEmpty()) {
             selectSite(sites.get(0));
         }
+    }
+
+    private Site findSiteByUrl(String url) {
+        for (Site site : sites) {
+            if (site.url.equals(url)) {
+                return site;
+            }
+        }
+        return null;
     }
 
     private void setAppLocale(String languageCode) {
@@ -307,7 +324,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     }
 
     private void initWebView() {
-        WebSettings settings = webView.getSettings();
+        android.webkit.WebSettings settings = webView.getSettings();
         
         settings.setJavaScriptEnabled(true);
         settings.setDomStorageEnabled(true);
@@ -324,27 +341,27 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             "Accept-Language: " + langTag;
         settings.setUserAgentString(customUA);
         
-        CookieManager.getInstance().setAcceptCookie(true);
-        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
+        android.webkit.CookieManager.getInstance().setAcceptCookie(true);
+        android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+            settings.setMixedContentMode(android.webkit.WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         }
         
-        webView.setWebViewClient(new WebViewClient() {
+        webView.setWebViewClient(new android.webkit.WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            public boolean shouldOverrideUrlLoading(android.webkit.WebView view, android.webkit.WebResourceRequest request) {
                 view.loadUrl(request.getUrl().toString());
                 return true;
             }
 
             @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            public void onReceivedSslError(android.webkit.WebView view, android.webkit.SslErrorHandler handler, android.net.http.SslError error) {
                 handler.proceed();
             }
         });
         
-        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebChromeClient(new android.webkit.WebChromeClient());
     }
 
     private void initClipboard() {
@@ -501,6 +518,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
 
     private void selectSite(Site site) {
         activeSite = site;
+        prefs.edit().putString(KEY_ACTIVE_SITE_URL, site.url).apply();
         renderSites();
         webView.loadUrl(site.url);
     }
@@ -515,7 +533,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     }
 
     private void showLanguageDialog() {
-        String[] languages = {
+        final String[] languages = {
             getString(R.string.language_en),
             getString(R.string.language_zh),
             getString(R.string.language_ja),
@@ -538,14 +556,44 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             getString(R.string.language_nl)
         };
         
-        String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR", "HI", "BN", "PA", "JV", "MR", "TR", "IT", "PL", "UK", "NL"};
+        final String[] languageCodes = {"EN", "ZH", "JA", "KO", "ES", "FR", "DE", "PT", "RU", "AR", "HI", "BN", "PA", "JV", "MR", "TR", "IT", "PL", "UK", "NL"};
         
-        new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.select_language))
-            .setItems(languages, (dialog, which) -> {
-                changeLanguage(languageCodes[which]);
-            })
-            .show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.select_language));
+        
+        ListView listView = new ListView(this);
+        listView.setDividerHeight(0);
+        
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.language_list_item, languages) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView = (TextView) view;
+                
+                if (languageCodes[position].equals(currentLanguage)) {
+                    textView.setBackgroundColor(Color.parseColor("#F0F0F0"));
+                    textView.setTextColor(Color.parseColor("#888888"));
+                    textView.setEnabled(false);
+                } else {
+                    textView.setBackgroundColor(Color.TRANSPARENT);
+                    textView.setTextColor(Color.BLACK);
+                    textView.setEnabled(true);
+                }
+                
+                return view;
+            }
+        };
+        
+        listView.setAdapter(adapter);
+        
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            if (!languageCodes[position].equals(currentLanguage)) {
+                changeLanguage(languageCodes[position]);
+            }
+        });
+        
+        builder.setView(listView);
+        builder.show();
     }
 
     private void showAddSiteDialog() {
@@ -645,6 +693,7 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
                 selectSite(sites.get(0));
             } else {
                 activeSite = null;
+                prefs.edit().remove(KEY_ACTIVE_SITE_URL).apply();
                 webView.loadUrl("about:blank");
             }
         }
@@ -726,13 +775,13 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     private void requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             try {
-                android.content.Intent intent = new android.content.Intent(
+                Intent intent = new Intent(
                     android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
                     android.net.Uri.parse("package:" + getPackageName())
                 );
                 startActivity(intent);
             } catch (Exception e) {
-                android.content.Intent intent = new android.content.Intent(
+                Intent intent = new Intent(
                     android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
                 );
                 startActivity(intent);
