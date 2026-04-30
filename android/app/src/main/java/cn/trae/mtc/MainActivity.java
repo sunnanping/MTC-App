@@ -85,6 +85,11 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        currentLanguage = prefs.getString(KEY_LANG, "EN");
+        setAppLocale(currentLanguage);
+        
         setContentView(R.layout.activity_main);
         
         initPreferences();
@@ -98,10 +103,107 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         }
     }
 
-    private void initPreferences() {
-        prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        currentLanguage = prefs.getString(KEY_LANG, "EN");
+    private void setAppLocale(String languageCode) {
+        Locale locale = getLocaleFromLanguageCode(languageCode);
+        Locale.setDefault(locale);
         
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.setLocale(locale);
+        getBaseContext().getResources().updateConfiguration(config, 
+            getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    private Locale getLocaleFromLanguageCode(String languageCode) {
+        switch (languageCode) {
+            case "ZH":
+                return new Locale("zh", "CN");
+            case "JA":
+                return new Locale("ja", "JP");
+            case "KO":
+                return new Locale("ko", "KR");
+            case "ES":
+                return new Locale("es", "ES");
+            case "FR":
+                return new Locale("fr", "FR");
+            case "DE":
+                return new Locale("de", "DE");
+            case "PT":
+                return new Locale("pt", "PT");
+            case "RU":
+                return new Locale("ru", "RU");
+            case "AR":
+                return new Locale("ar", "SA");
+            case "HI":
+                return new Locale("hi", "IN");
+            case "BN":
+                return new Locale("bn", "BD");
+            case "PA":
+                return new Locale("pa", "IN");
+            case "JV":
+                return new Locale("jv", "ID");
+            case "MR":
+                return new Locale("mr", "IN");
+            case "TR":
+                return new Locale("tr", "TR");
+            case "IT":
+                return new Locale("it", "IT");
+            case "PL":
+                return new Locale("pl", "PL");
+            case "UK":
+                return new Locale("uk", "UA");
+            case "NL":
+                return new Locale("nl", "NL");
+            default:
+                return new Locale("en", "US");
+        }
+    }
+
+    private String getUaLanguageCode(String languageCode) {
+        switch (languageCode) {
+            case "ZH":
+                return "zh-CN";
+            case "JA":
+                return "ja-JP";
+            case "KO":
+                return "ko-KR";
+            case "ES":
+                return "es-ES";
+            case "FR":
+                return "fr-FR";
+            case "DE":
+                return "de-DE";
+            case "PT":
+                return "pt-PT";
+            case "RU":
+                return "ru-RU";
+            case "AR":
+                return "ar-SA";
+            case "HI":
+                return "hi-IN";
+            case "BN":
+                return "bn-BD";
+            case "PA":
+                return "pa-IN";
+            case "JV":
+                return "jv-ID";
+            case "MR":
+                return "mr-IN";
+            case "TR":
+                return "tr-TR";
+            case "IT":
+                return "it-IT";
+            case "PL":
+                return "pl-PL";
+            case "UK":
+                return "uk-UA";
+            case "NL":
+                return "nl-NL";
+            default:
+                return "en-US";
+        }
+    }
+
+    private void initPreferences() {
         String sitesJson = prefs.getString(KEY_SITES, null);
         if (sitesJson != null) {
             try {
@@ -215,9 +317,11 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
         
+        String langTag = getUaLanguageCode(currentLanguage);
         String customUA = "Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + 
             "; " + Build.MODEL + ") AppleWebKit/537.36 (KHTML, like Gecko) " +
-            "Chrome/120.0.0.0 Mobile Safari/537.36";
+            "Chrome/120.0.0.0 Mobile Safari/537.36 " +
+            "Accept-Language: " + langTag;
         settings.setUserAgentString(customUA);
         
         CookieManager.getInstance().setAcceptCookie(true);
@@ -558,8 +662,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
         return name.substring(0, 1).toUpperCase();
     }
 
-    // ==================== Phase 2: Permission, MD5, Dialog ====================
-
     private void handleAutoSave(String content) {
         if (activeSite == null || content == null || content.trim().isEmpty()) {
             return;
@@ -894,8 +996,6 @@ public class MainActivity extends com.getcapacitor.BridgeActivity {
             super.onBackPressed();
         }
     }
-
-    // ==================== Data Classes ====================
 
     static class Site {
         String name;
